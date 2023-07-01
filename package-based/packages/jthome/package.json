@@ -1,0 +1,14 @@
+{
+  "name": "home",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "vite build",
+    "copyassets": "node copyAssets.mjs",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vite": "^4.3.9"
+  }
+}
