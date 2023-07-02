@@ -26,10 +26,10 @@ routeHtml("/", "home");
 routeHtml("/about", "about");
 routeHtml("/doodles", "doodles");
 routeHtml("/civildawn", "civildawn");
+routeHtml("/imposter", "imposter");
+routeHtml("/imposter/:gameCode", "imposter");
 
 /*
-routeHtml('/imposter', 'imposter');
-routeHtml('/imposter/:gameCode', 'imposter');
 routeHtml('/meyhemn', 'meyhemn');
 routeHtml('/rollfighter', 'rollfighter');
 routeHtml('/sandbox', 'sandbox');
