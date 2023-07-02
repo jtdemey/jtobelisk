@@ -1,22 +1,25 @@
 import fs from "fs-extra";
-import { stderr } from "process";
+import { stderr, stdout } from "process";
 
-let distExists = false;
+const copyAssets = () => {
+	fs.stat("../jtwebserver/dist/", (err, stats) => {
+		if (err) {
+			stderr.write(err);
+			stderr.write("../jtwebserver/dist directory not found");
+			return;
+		}
+		if (!stats.isDirectory()) {
+			stderr.write("../jtwebserver/dist is not a directory");
+			return;
+		}
+		const origin = "./dist/";
+		const destination = "../jtwebserver/dist/";
 
-fs.stat("../jtwebserver/dist/", (err, stats) => {
-	if (err) {
-		stderr.write(err);
-		stderr.write("../jtwebserver/dist directory not found");
-		return;
-	}
-	if (!stats.isDirectory()) {
-		stderr.write("../jtwebserver/dist is not a directory");
-		return;
-	}
-	distExists = true;
-});
+		fs.rmSync(destination, { force: true, recursive: true });
+		fs.copySync(origin, destination, { overwrite: false });
 
-if (distExists === false) return;
+		stdout.write(`Copied files from ${origin} to ${destination}\n`);
+	});
+};
 
-fs.rmSync("../jtwebserver/dist/", { force: true, recursive: true });
-
+copyAssets();

@@ -18,7 +18,7 @@ const sendHtmlFile = (res, fileName) => {
 };
 
 const routeHtml = (endpoint, fileName) =>
-  router.route(endpoint).get((req, res) => {
+  router.route(endpoint).get((_, res) => {
     sendHtmlFile(res, `${fileName}.html`);
   });
 

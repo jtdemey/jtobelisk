@@ -16,6 +16,7 @@ const port = process.env.SERVER_PORT || 3000;
     }
     expressApp.use(morgan("short"));
     expressApp.use("/", router);
+    expressApp.use(express.static("dist"));
     process.on("SIGINT", () => process.exit());
     const httpServer = expressApp.listen(port, (err) => {
       if (err) throw err;

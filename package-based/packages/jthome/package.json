@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && node copyAssets.mjs",
     "copyassets": "node copyAssets.mjs",
     "dev": "vite",
     "preview": "vite preview"

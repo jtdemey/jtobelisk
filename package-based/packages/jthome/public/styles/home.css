@@ -115,7 +115,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: '';
+  content: "";
   content: none;
 }
 table {
@@ -424,7 +424,7 @@ html {
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
-  font-family: 'Arial';
+  font-family: "Arial";
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -442,7 +442,7 @@ canvas {
 }
 
 h1 {
-  font-family: 'Ubuntu', sans-serif;
+  font-family: "Ubuntu", sans-serif;
 }
 
 h4 {
@@ -455,7 +455,7 @@ h6 {
 }
 
 p {
-  font-family: 'Vollkorn', serif;
+  font-family: "Vollkorn", serif;
 }
 
 strong {
@@ -523,7 +523,9 @@ strong {
   background: linear-gradient(to right, white, #d9d9d9);
 }
 
-.banner-area > a, .banner-area > a:focus, .banner-area > a:hover {
+.banner-area > a,
+.banner-area > a:focus,
+.banner-area > a:hover {
   color: inherit;
   text-decoration: none;
 }
@@ -543,7 +545,7 @@ strong {
 .jd-title {
   display: inline-block;
   margin-top: 0.5em;
-  font-family: 'Abel', sans-serif;
+  font-family: "Abel", sans-serif;
   font-size: 3em;
   overflow: hidden;
   white-space: nowrap;
@@ -582,7 +584,7 @@ strong {
 }
 
 .jd-subtitle {
-  font-family: 'Abel', sans-serif;
+  font-family: "Abel", sans-serif;
   font-size: 1.5em;
   display: flex;
   align-items: center;
@@ -644,7 +646,7 @@ strong {
   width: 100%;
   margin: auto;
   color: #fff;
-  font-family: 'Abel', sans-serif;
+  font-family: "Abel", sans-serif;
   font-size: 0.85em;
 }
 
@@ -694,7 +696,7 @@ strong {
   width: 86px;
   margin: 0;
   padding: 0;
-  font-family: 'Abel', sans-serif;
+  font-family: "Abel", sans-serif;
 }
 
 .nav-block:hover {
@@ -761,7 +763,7 @@ strong {
   background-color: #011936;
 }
 .contact-highlight {
-  background-color: #273F3A;
+  background-color: #273f3a;
 }
 .doodles-highlight {
   background-color: #175873;
@@ -852,7 +854,7 @@ strong {
 }
 
 .m-b-3 {
-	margin-bottom: 3em;
+  margin-bottom: 3em;
 }
 
 .content-btns {
@@ -881,7 +883,7 @@ strong {
   height: 100%;
   margin: 0;
   padding-top: 0.4em;
-  font-family: 'Vollkorn', serif;
+  font-family: "Vollkorn", serif;
   font-size: 1.1em;
 }
 
@@ -910,16 +912,16 @@ strong {
 }
 
 #skills-list {
-	max-width: 40em;
-	margin: 1.5em auto 3em;
-	padding-left: 4rem;
-  font-family: 'Vollkorn', serif;
-	list-style: disclosure-closed;
-	text-align: left;
+  max-width: 40em;
+  margin: 1.5em auto 3em;
+  padding-left: 6rem;
+  font-family: "Vollkorn", serif;
+  list-style: disclosure-closed;
+  text-align: left;
 }
 
 #skills-list > li {
-	padding: 0.25rem;
+  padding: 0.25rem;
 }
 
 /* CONTACT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -952,15 +954,15 @@ strong {
   margin: -30px -30px 30px -30px;
 }
 
-.contact-form input[type='text'],
-.contact-form input[type='date'],
-.contact-form input[type='datetime'],
-.contact-form input[type='email'],
-.contact-form input[type='number'],
-.contact-form input[type='search'],
-.contact-form input[type='time'],
-.contact-form input[type='url'],
-.contact-form input[type='password'],
+.contact-form input[type="text"],
+.contact-form input[type="date"],
+.contact-form input[type="datetime"],
+.contact-form input[type="email"],
+.contact-form input[type="number"],
+.contact-form input[type="search"],
+.contact-form input[type="time"],
+.contact-form input[type="url"],
+.contact-form input[type="password"],
 .contact-form textarea,
 .contact-form select {
   box-sizing: border-box;
@@ -975,7 +977,7 @@ strong {
   background: transparent;
   margin-bottom: 10px;
   height: 45px;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: "Ubuntu", sans-serif;
 }
 
 .contact-form textarea {
@@ -984,8 +986,8 @@ strong {
   overflow: hidden;
 }
 
-.contact-form input[type='button'],
-.contact-form input[type='submit'] {
+.contact-form input[type="button"],
+.contact-form input[type="submit"] {
   -moz-box-shadow: inset 0px 1px 0px 0px #45d6d6;
   -webkit-box-shadow: inset 0px 1px 0px 0px #45d6d6;
   box-shadow: inset 0px 1px 0px 0px #45d6d6;
@@ -994,15 +996,15 @@ strong {
   display: inline-block;
   cursor: pointer;
   color: #ffffff;
-  font-family: 'Open Sans Condensed', sans-serif;
+  font-family: "Open Sans Condensed", sans-serif;
   font-size: 14px;
   padding: 8px 18px;
   text-decoration: none;
   text-transform: uppercase;
 }
 
-.contact-form input[type='button']:hover,
-.contact-form input[type='submit']:hover {
+.contact-form input[type="button"]:hover,
+.contact-form input[type="submit"]:hover {
   background: linear-gradient(to bottom, #34caca 5%, #30c9c9 100%);
   background-color: #34caca;
 }
