@@ -1,10 +1,10 @@
 const loadDoodle = async (ind, isPreview) => {
   const uri = `${window.location.origin}/doodles/`;
   const dood = new Image();
-  dood.src = `${uri}${isPreview ? 'thumbs/' : ''}img${ind}.jpg`;
+  dood.src = `${uri}${isPreview ? 'thumbs/' : ''}img${ind}.webp`;
 
   const link = document.createElement('a');
-  link.href = `${uri}img${ind}.jpg`;
+  link.href = `${uri}img${ind}.webp`;
   link.setAttribute('target', '_blank');
   link.setAttribute('rel', 'noopener noreferrer');
   link.appendChild(dood);
