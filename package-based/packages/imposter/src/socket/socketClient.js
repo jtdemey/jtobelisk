@@ -1,18 +1,26 @@
-import { IMPOSTER_VIEWS, SOCKET_COMMANDS } from '../redux/imposterConstants';
-import { alertMessage, changeGameView, gameTick, initGame, setSocketId, updateVotes } from '../redux/imposterSlice';
+import { IMPOSTER_VIEWS, SOCKET_COMMANDS } from "../redux/imposterConstants";
+import {
+  alertMessage,
+  changeGameView,
+  gameTick,
+  initGame,
+  setSocketId,
+  updateVotes,
+} from "../redux/imposterSlice";
 
 export let socket = null;
 
-const initImposter = dispatch => {
-  //Socket client
-  const socketUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URI || 'ws://localhost:3000/';
+const initImposter = (dispatch) => {
+  console.log(import.meta.env.WEBSOCKET_URI);
+  const socketUrl =
+    import.meta.env.WEBSOCKET_URI || "ws://localhost:3000/";
   socket = new WebSocket(socketUrl);
   let socketId;
 
   socket.onopen = () => {
-		const launchCommand = { command: SOCKET_COMMANDS.LAUNCHED_IMPOSTER };
-		//TODO: Handle reconnecting
-		/*const storedId = window.localStorage.getItem('JTD_imposterSocketId');
+    const launchCommand = { command: SOCKET_COMMANDS.LAUNCHED_IMPOSTER };
+    //TODO: Handle reconnecting
+    /*const storedId = window.localStorage.getItem('JTD_imposterSocketId');
 		if(storedId) {
 			const lastSeen = parseDateStr(window.localStorage.getItem('JTD_imposterHourLastSeen'));
 			console.log(Math.abs(new Date().getTime() - lastSeen.getTime()));
@@ -27,33 +35,35 @@ const initImposter = dispatch => {
     socket.send(JSON.stringify(launchCommand));
   };
 
-  socket.onerror = error => {
-    dispatch(alertMessage('Error 69: your browser sucks :(', 5000));
-    console.log('Error 69: no websocket support found :(');
+  socket.onerror = (error) => {
+    dispatch(alertMessage("Error 69: your browser sucks :(", 5000));
+    console.log("Error 69: no websocket support found :(");
     console.error(error);
   };
 
-  socket.onmessage = e => {
+  socket.onmessage = (e) => {
     let msg;
     try {
       msg = JSON.parse(e.data);
-    } catch(e) {
-      console.error('Unable to parse incoming socket message.', e);
+    } catch (e) {
+      console.error("Unable to parse incoming socket message.", e);
     }
-    if(msg.command !== 'gameTick') {
+    if (msg.command !== "gameTick") {
       console.debug(`\tGot command "${msg.command}"`);
     }
-    switch(msg.command) {
+    switch (msg.command) {
       case SOCKET_COMMANDS.ACCEPT_IMPOSTER_LAUNCH:
-				console.log(`Successful handshake with GameSuite - welcome, player ${msg.socketId}.`);
-				socketId = msg.socketId;
+        console.log(
+          `Successful handshake with GameSuite - welcome, player ${msg.socketId}.`
+        );
+        socketId = msg.socketId;
         dispatch(setSocketId({ socketId: msg.socketId }));
         break;
       case SOCKET_COMMANDS.INIT_GAME:
         dispatch(initGame(msg.gameState));
         break;
       case SOCKET_COMMANDS.PING:
-				socket.send(JSON.stringify({ command: 'pong', socketId }));
+        socket.send(JSON.stringify({ command: "pong", socketId }));
         break;
       case SOCKET_COMMANDS.GAME_TICK:
         dispatch(gameTick(msg.gameState));
@@ -61,9 +71,9 @@ const initImposter = dispatch => {
       case SOCKET_COMMANDS.IMPOSTER_ERROR:
         console.error(msg.text);
         dispatch(alertMessage(msg.text));
-				if(msg.returnToMain === true) {
-					dispatch(changeGameView(IMPOSTER_VIEWS.MAIN_MENU));
-				}
+        if (msg.returnToMain === true) {
+          dispatch(changeGameView(IMPOSTER_VIEWS.MAIN_MENU));
+        }
         break;
       case SOCKET_COMMANDS.UPDATE_VOTES:
         dispatch(updateVotes(msg.votes));
@@ -74,13 +84,16 @@ const initImposter = dispatch => {
     }
   };
 
-  socket.onclose = () => dispatch(alertMessage('Lost connection; try refreshing.', 999999));
+  socket.onclose = () =>
+    dispatch(alertMessage("Lost connection; try refreshing.", 999999));
 
   window.onbeforeunload = () => {
-    socket.send(JSON.stringify({
-      command: SOCKET_COMMANDS.SOCKET_DISONNECT,
-      socketId: socketId
-    }));
+    socket.send(
+      JSON.stringify({
+        command: SOCKET_COMMANDS.SOCKET_DISONNECT,
+        socketId: socketId,
+      })
+    );
     return null;
   };
 };

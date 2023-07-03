@@ -7,8 +7,8 @@ export default defineConfig({
 		outDir: "../dist",
 		rollupOptions: {
 			input: {
-				app: "./src/index.jsx",
-				page: "./src/imposter.html"
+				imposter: "./src/index.jsx",
+				imposterRoot: "./src/imposter.html"
 			}
 		}
 	},

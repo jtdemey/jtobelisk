@@ -30,10 +30,12 @@ const ImposterHeader = () => {
 		opacity: 0,
 		yScale: 0.5
 	}));
-	React.useEffect(() => api.start({
-		opacity: 1,
-		yScale: 1
-	}));
+	React.useEffect(() => {
+		api.start({
+			opacity: 1,
+			yScale: 1
+		});
+	});
 	return (
 		<Container>
 			<Header style={{

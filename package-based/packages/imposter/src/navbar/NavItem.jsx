@@ -19,11 +19,13 @@ const NavItem = props => {
 		opacity: 0,
 		y: 40
 	}));
-	React.useEffect(() => api.start({
-		delay: props.delay || 0,
-		opacity: 1,
-		y: 0
-	}), [props.visible]);
+	React.useEffect(() => {
+		api.start({
+			delay: props.delay || 0,
+			opacity: 1,
+			y: 0
+		});
+	}, [props.visible]);
 	return (
 		<Item
 			onClick={() => props.clickFunc()}

@@ -27,7 +27,9 @@ const NavBar = props => {
 	const dispatch = useDispatch();
 	const theme = getTheme(useSelector(state => state.game.theme));
 	const [spring, api] = useSpring(() => getButterySpring({ yScale: 0.5 }));
-	React.useEffect(() => api.start({ yScale: props.visible ? 1.0 : 0.0 }));
+	React.useEffect(() => {
+		api.start({ yScale: props.visible ? 1.0 : 0.0 });
+	});
 	return (
 		<Bar style={{
 			background: theme.secondary,
