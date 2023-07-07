@@ -67,7 +67,7 @@ export const makeGameSuite = () => {
     votes: [],
   });
 
-  gameSuite.makePlayer = (socket, sockId) => ({
+  gameSuite.makePlayer = (socket) => ({
     extendTimerCt: 0,
     gameId: null,
     hurryUpCt: 0,
@@ -76,7 +76,7 @@ export const makeGameSuite = () => {
     isReady: false,
     name: null,
     socket: socket,
-    socketId: sockId,
+    socketId: nanoid(),
   });
 
   gameSuite.makeVote = (

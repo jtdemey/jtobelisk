@@ -1,12 +1,12 @@
-import { nanoid } from "nanoid";
 import { SOCKET_COMMANDS } from "../../../components/imposter/redux/imposterConstants";
 
 export const handleImposterMsg = (wss, ws, msg, recognizedByModule) => {
   let result, playerId;
   switch (msg.command) {
     case SOCKET_COMMANDS.LAUNCHED_IMPOSTER:
-      playerId = nanoid();
-      wss.gs.addPlayer(wss.gs.makePlayer(ws, playerId), true);
+      const player = wss.gs.makePlayer(ws);
+      playerId = player.socketId;
+      wss.gs.addPlayer(player, true);
       ws.send(
         wss.gs.makeCommand(SOCKET_COMMANDS.ACCEPT_IMPOSTER_LAUNCH, {
           socketId: playerId,
