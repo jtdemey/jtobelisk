@@ -2,8 +2,8 @@ import {
   PHASES,
   SOCKET_COMMANDS,
   VOTE_TYPES,
-} from "../../../components/imposter/redux/imposterConstants";
-import { rollScenario } from "./imposterScenarios";
+} from "../redux/imposterConstants.js";
+import { rollScenario } from "./imposterScenarios.js";
 
 const createImposterDomain = (gameSuite) => {
   const domain = {};
@@ -199,6 +199,39 @@ const createImposterDomain = (gameSuite) => {
     );
   };
 
+  domain.handleSubmitJoinGame = (msg, currentGame) => {
+    if (!currentGame) {
+      gameSuite.emitToPlayer(
+        msg.socketId,
+        gameSuite.makeCommand(SOCKET_COMMANDS.IMPOSTER_ERROR, {
+          returnToMain: true,
+          text: `Could not find game ${msg.gameId}.`,
+        })
+      );
+      return;
+    }
+    if (currentGame.players.length > 11) {
+      gameSuite.emitToPlayer(
+        msg.socketId,
+        gameSuite.makeCommand(SOCKET_COMMANDS.IMPOSTER_ERROR, {
+          returnToMain: true,
+          text: `Game ${msg.gameId.toUpperCase()} is full.`,
+        })
+      );
+      return;
+    }
+    if (currentGame.phase === PHASES.IN_GAME) {
+      gameSuite.emitToPlayer(
+        msg.socketId,
+        gameSuite.makeCommand(SOCKET_COMMANDS.IMPOSTER_ERROR, {
+          returnToMain: true,
+          text: `Game ${msg.gameId.toUpperCase()} is in session; you can join when the game completes.`,
+        })
+      );
+      return;
+    }
+  };
+
   domain.hurryUp = (sockId, gameId) => {
     const game = gameSuite.getGame(gameId);
     game.remainingTime -= 1;
@@ -262,6 +295,16 @@ const createImposterDomain = (gameSuite) => {
         break;
     }
     return game;
+  };
+
+  domain.removePlayer = (socketId, activeGame) => {
+    if (!activeGame) return;
+    if (socketId === activeGame.imposterId) {
+      gameSuite.updateGame(activeGame.gameId, {
+        phase: PHASES.BYSTANDER_VICTORY,
+        remainingTime: 15,
+      });
+    }
   };
 
   return domain;

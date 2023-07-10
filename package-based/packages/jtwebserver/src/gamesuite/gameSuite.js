@@ -1,25 +1,33 @@
 import logger from "../logger.js";
 import { nanoid } from "nanoid";
-import {
-  PHASES,
-  SOCKET_COMMANDS,
-} from "../../components/imposter/redux/imposterConstants";
-import { genGameId } from "../../components/imposter/ImposterUtils";
-import { handlePong, pingPlayers } from "./playerCleaner";
-import { handleImposterMsg } from "./imposter/imposterController";
-import createImposterDomain from "./imposter/imposterDomain";
+import { CORE_SOCKET_COMMANDS } from "./socketCommands.js";
+import { handlePong, pingPlayers } from "./playerCleaner.js";
+import createImposterModule from "./gamemodules/imposterModule.js";
 
 export const makeGameSuite = () => {
   const gameSuite = {};
+
+  /* GameModule: {
+   *   controller: (wss, ws, msg, recognizedByModule) => void;
+   *   domain: {
+   *     handleSubmitHostGame?: (msg: { socketId: string, playerName?: string }, currentGame: Game, currentPlayer: Player) => void;
+   *     handleSubmitJoinGame?: (msg: { socketId: string, playerName?: string }, currentGame: Game, currentPlayer: Player) => void;
+   *     initialRemainingTime?: number;
+   *     iteratePhase: (game: Game) => void;
+   *     removePlayer: (socketId: string, activeGame: Game) => void;
+   *   }
+   *
+   *  Todo: Move everything custom to domains
+   */
 
   //Fields
   gameSuite.isIdle = false;
   gameSuite.clock = null;
   gameSuite.gameList = [];
   gameSuite.playerList = [];
-
-  //Games
-  gameSuite.imposter = createImposterDomain(gameSuite);
+  gameSuite.gameModules = {
+    imposter: createImposterModule(gameSuite),
+  };
 
   //Private
   let gsTick = 0;
@@ -50,22 +58,31 @@ export const makeGameSuite = () => {
     });
   };
 
-  gameSuite.makeGame = () => ({
-    gameId: genGameId(),
-    gameTitle: "imposter",
-    host: null,
-    imposterId: null,
-    isPaused: false,
-    players: [],
-    phase: PHASES.LOBBY,
-    remainingTime: 45,
-    scenario: null,
-    scenarioList: [],
-    condition: null,
-    roles: [],
-    tick: 0,
-    votes: [],
-  });
+  const genGameId = () => {
+    const abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let id = "";
+    for (let i = 0; i < 4; i++) {
+      const cInd = Math.floor(Math.random() * abc.length);
+      const c = abc.charAt(cInd);
+      id += c;
+    }
+    return id;
+  };
+
+  gameSuite.makeGame = (moduleName) => {
+    const currentModule = gameSuite.getGameModule(moduleName);
+    return {
+      gameId: genGameId(),
+      gameTitle: moduleName,
+      host: null,
+      isPaused: false,
+      players: [],
+      phase: 0,
+      remainingTime: currentModule.initialRemainingTime || 45,
+      tick: 0,
+      ...currentModule.makeGame(),
+    };
+  };
 
   gameSuite.makePlayer = (socket) => ({
     extendTimerCt: 0,
@@ -147,6 +164,15 @@ export const makeGameSuite = () => {
     return r;
   };
 
+  gameSuite.getGameModule = (moduleName) => {
+    const m = gameSuite.gameModules[moduleName];
+    if (!m) {
+      gameSuite.logError(`Could not get game module ${moduleName}`);
+      return false;
+    }
+    return m;
+  };
+
   gameSuite.getPlayer = (socketId) => {
     const r = gameSuite.playerList.filter((p) => p.socketId === socketId)[0];
     if (!r) {
@@ -168,6 +194,7 @@ export const makeGameSuite = () => {
     };
     const f = gameSuite.gameList.filter((g) => g.gameId !== gameId);
     gameSuite.gameList = f.concat([g]);
+    return g;
   };
 
   gameSuite.updatePlayer = (socketId, playerData) => {
@@ -181,6 +208,7 @@ export const makeGameSuite = () => {
     };
     const f = gameSuite.playerList.filter((p) => p.socketId !== socketId);
     gameSuite.playerList = f.concat([p]);
+    return p;
   };
 
   //Adders
@@ -223,17 +251,15 @@ export const makeGameSuite = () => {
         gameSuite.logInfo(
           `Removed empty game ${activeGame.gameId} (Total: ${gameSuite.gameList.length})`
         );
-      } else if (socketId === activeGame.imposterId) {
-        gameSuite.updateGame(activeGame.gameId, {
-          phase: PHASES.BYSTANDER_VICTORY,
-          players: activeGame.players.filter((p) => p.socketId !== socketId),
-          remainingTime: 15,
-        });
       } else {
         gameSuite.updateGame(activeGame.gameId, {
           players: activeGame.players.filter((p) => p.socketId !== socketId),
         });
       }
+    }
+    const currentModule = gameSuite.getGameModule(activeGame.gameTitle);
+    if (currentModule.removePlayer) {
+      currentModule.removePlayer(socketId, activeGame);
     }
     gameSuite.playerList = gameSuite.playerList.filter(
       (p) => p.socketId !== socketId
@@ -255,7 +281,7 @@ export const makeGameSuite = () => {
     if (g.remainingTime < 0) {
       g = gameSuite.iteratePhase(g);
     }
-    if (g.votes.length > 0) {
+    if (g.votes && g.votes.length > 0) {
       g.votes = g.votes
         .map((v) => ({ ...v, tick: v.tick - 1 }))
         .filter((v) => v.tick > 0);
@@ -264,15 +290,15 @@ export const makeGameSuite = () => {
   };
 
   gameSuite.iteratePhase = (game) => {
-    let g = { ...game, votes: [] };
+    let g = { ...game };
+    if (g.votes) {
+      g.votes = [];
+    }
     for (let i = 0; i < g.players.length; i++) {
       game.players[i].isReady = false;
     }
-    switch (g.gameTitle) {
-      case "imposter":
-        g = gameSuite.imposter.iteratePhase(g);
-        break;
-    }
+    const currentModule = gameSuite.getGameModule(g.gameTitle);
+    currentModule.iteratePhase(g);
     return g;
   };
 
@@ -280,7 +306,7 @@ export const makeGameSuite = () => {
     if (tick % 15 === 0) {
       pingPlayers(gameSuite);
     }
-    if (tick > 30000) {
+    if (tick > Number.MAX_SAFE_INTEGER) {
       tick = 0;
     }
     tick++;
@@ -302,7 +328,7 @@ export const makeGameSuite = () => {
         gameSuite.updateGame(g.gameId, { ...g });
         gameSuite.emitToGame(
           g.gameId,
-          gameSuite.makeCommand(SOCKET_COMMANDS.GAME_TICK, {
+          gameSuite.makeCommand(CORE_SOCKET_COMMANDS.GAME_TICK, {
             gameState: g,
           })
         );
@@ -327,15 +353,18 @@ export const makeGameSuite = () => {
 
   //Form Handlers
   gameSuite.handleSubmitHostGame = (msg) => {
-    const newGame = gameSuite.makeGame();
-    gameSuite.updatePlayer(msg.socketId, {
+    const newGame = gameSuite.makeGame(msg.gameTitle);
+    const hostPlayer = gameSuite.updatePlayer(msg.socketId, {
       gameId: newGame.gameId,
       name: truncateName(msg.playerName) || "Dingus",
     });
-    const hostPlayer = gameSuite.getPlayer(msg.socketId);
     newGame.host = hostPlayer.socketId;
     newGame.players = newGame.players.concat([hostPlayer]);
     gameSuite.addGame(newGame, true);
+    const currentModule = gameSuite.getGameModule(msg.gameTitle);
+    if (currentModule.handleSubmitHostGame) {
+      currentModule.handleSubmitHostGame(msg, newGame, hostPlayer);
+    }
     gameSuite.logInfo(`Host game submitted by ${msg.socketId}`);
     return newGame;
   };
@@ -356,51 +385,24 @@ export const makeGameSuite = () => {
   };
 
   gameSuite.handleSubmitJoinGame = (msg) => {
-    const prospImposter = gameSuite.getGame(msg.gameId.toUpperCase());
-    if (!prospImposter) {
-      gameSuite.emitToPlayer(
-        msg.socketId,
-        gameSuite.makeCommand(SOCKET_COMMANDS.IMPOSTER_ERROR, {
-          returnToMain: true,
-          text: `Could not find game ${msg.gameId}.`,
-        })
-      );
-      return;
-    }
-    if (prospImposter.players.length > 11) {
-      gameSuite.emitToPlayer(
-        msg.socketId,
-        gameSuite.makeCommand(SOCKET_COMMANDS.IMPOSTER_ERROR, {
-          returnToMain: true,
-          text: `Game ${msg.gameId.toUpperCase()} is full.`,
-        })
-      );
-      return;
-    }
-    if (prospImposter.phase === PHASES.IN_GAME) {
-      gameSuite.emitToPlayer(
-        msg.socketId,
-        gameSuite.makeCommand(SOCKET_COMMANDS.IMPOSTER_ERROR, {
-          returnToMain: true,
-          text: `Game ${msg.gameId.toUpperCase()} is in session; you can join when the game completes.`,
-        })
-      );
-      return;
-    }
+    const targetGame = gameSuite.getGame(msg.gameId.toUpperCase());
     let rawName = truncateName(msg.playerName) || "Dingus";
-    const playerName = getOriginalName(rawName.trim(), prospImposter.players);
-    gameSuite.updatePlayer(msg.socketId, {
+    const playerName = getOriginalName(rawName.trim(), targetGame.players);
+    const joiner = gameSuite.updatePlayer(msg.socketId, {
       gameId: msg.gameId.toUpperCase(),
       name: playerName,
     });
-    const joiner = gameSuite.getPlayer(msg.socketId);
-    const newPlayers = prospImposter.players.concat([joiner]);
+    const newPlayers = targetGame.players.concat([joiner]);
     gameSuite.updateGame(msg.gameId, {
       players: newPlayers,
     });
+    const currentModule = gameSuite.getGameModule(msg.gameTitle);
+    if (currentModule.handleSubmitJoinGame) {
+      currentModule.handleSubmitJoinGame(msg, targetGame, joiner);
+    }
     gameSuite.logInfo(`Join game submitted by ${msg.socketId}`);
     return {
-      ...prospImposter,
+      ...targetGame,
       players: newPlayers,
     };
   };
@@ -408,6 +410,7 @@ export const makeGameSuite = () => {
   //Message handler
   gameSuite.handleSocketMsg = (wss, ws, raw) => {
     const msg = wss.gs.parseRes(raw);
+    console.log(msg);
     if (msg.command !== "ping" && msg.command !== "pong") {
       gameSuite.logInfo(
         `${msg.socketId ? `Socket ${msg.socketId}` : `New player`} says ${
@@ -415,24 +418,51 @@ export const makeGameSuite = () => {
         }`
       );
     }
-    let recognizedByModule = ["core", "imposter"];
-    //General handling
+    let recognizedByModule = ["core", ...Object.keys(gameSuite.gameModules)];
+    //Core handler
     switch (msg.command) {
-      case SOCKET_COMMANDS.PONG:
+      case CORE_SOCKET_COMMANDS.PONG:
         handlePong(msg.socketId);
         break;
-      case SOCKET_COMMANDS.SOCKET_DISONNECT:
+      case CORE_SOCKET_COMMANDS.SOCKET_DISONNECT:
         wss.gs.removePlayer(msg.socketId, true);
         break;
       default:
         recognizedByModule = recognizedByModule.filter((x) => x !== "core");
         break;
     }
-    handleImposterMsg(wss, ws, msg, recognizedByModule);
+    const currentPlayer = gameSuite.getPlayer(msg.socketId);
+    const currentGame = gameSuite.getGame(currentPlayer.gameId);
+    const currentModule = gameSuite.getGameModule(currentGame.gameTitle);
+    console.log(currentModule);
+    currentModule.controller(wss, ws, msg, recognizedByModule);
     if (recognizedByModule.length < 1) {
       gameSuite.logError(`Socket command '${msg.command}' not recognized.`);
     }
   };
+
+  const verifyModules = () => {
+    const propsToCheck = [
+      "iteratePhase",
+      "removePlayer",
+    ];
+    Object.keys(gameSuite.gameModules).forEach((moduleName) => {
+      let checksOut = true;
+      const currentModule = gameSuite.gameModules[moduleName];
+      propsToCheck.forEach((prop) => {
+        if (!currentModule.domain[prop]) {
+          checksOut = false;
+          gameSuite.logError(
+            `Expected property ${prop} in game module ${moduleName}'s domain`
+          );
+        }
+      });
+      if (checksOut) {
+        gameSuite.logInfo(`Loaded module '${moduleName}'`);
+      }
+    });
+  };
+  verifyModules();
 
   return gameSuite;
 };

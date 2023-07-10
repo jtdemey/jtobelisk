@@ -1,4 +1,4 @@
-import { SOCKET_COMMANDS } from "../../../components/imposter/redux/imposterConstants";
+import { SOCKET_COMMANDS } from "../redux/imposterConstants.js";
 
 export const handleImposterMsg = (wss, ws, msg, recognizedByModule) => {
   let result, playerId;

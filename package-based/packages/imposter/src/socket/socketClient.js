@@ -18,7 +18,10 @@ const initImposter = (dispatch) => {
   let socketId;
 
   socket.onopen = () => {
-    const launchCommand = { command: SOCKET_COMMANDS.LAUNCHED_IMPOSTER };
+    const launchCommand = {
+      command: SOCKET_COMMANDS.LAUNCHED_IMPOSTER,
+      gameTitle: "imposter"
+    };
     //TODO: Handle reconnecting
     /*const storedId = window.localStorage.getItem('JTD_imposterSocketId');
 		if(storedId) {
@@ -37,7 +40,7 @@ const initImposter = (dispatch) => {
 
   socket.onerror = (error) => {
     dispatch(alertMessage("Error 69: your browser sucks :(", 5000));
-    console.log("Error 69: no websocket support found :(");
+    console.error("Error 69: no websocket support found :(");
     console.error(error);
   };
 
@@ -90,7 +93,7 @@ const initImposter = (dispatch) => {
   window.onbeforeunload = () => {
     socket.send(
       JSON.stringify({
-        command: SOCKET_COMMANDS.SOCKET_DISONNECT,
+        command: SOCKET_COMMANDS.SOCKET_DISCONNECT,
         socketId: socketId,
       })
     );

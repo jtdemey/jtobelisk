@@ -61,7 +61,7 @@ export const SOCKET_COMMANDS = {
   PONG: "pong",
   REFRESH_VOTES: "refreshVotes",
   RETURN_TO_LOBBY: "returnToLobby",
-  SOCKET_DISONNECT: "socketDisconnect",
+  SOCKET_DISCONNECT: "socketDisconnect",
   SUBMIT_HOST_GAME: "submitHostGame",
   SUBMIT_JOIN_GAME: "submitJoinGame",
   TOGGLE_READY_STATE: "toggleReadyState",
