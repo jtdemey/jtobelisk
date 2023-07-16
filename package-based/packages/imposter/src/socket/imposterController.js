@@ -2,13 +2,19 @@ import { SOCKET_COMMANDS } from "../redux/imposterConstants.js";
 
 export const handleImposterMsg = (wss, ws, msg, recognizedByModule) => {
   let result, playerId;
+  const gameModule = wss.gs.getGameModule("imposter");
+  if (!gameModule) {
+    console.error("Couldn't resolve imposter game module");
+    return;
+  }
+  const domain = gameModule.domain;
   switch (msg.command) {
-    case SOCKET_COMMANDS.LAUNCHED_IMPOSTER:
+    case SOCKET_COMMANDS.LAUNCH_GAME:
       const player = wss.gs.makePlayer(ws);
       playerId = player.socketId;
       wss.gs.addPlayer(player, true);
       ws.send(
-        wss.gs.makeCommand(SOCKET_COMMANDS.ACCEPT_IMPOSTER_LAUNCH, {
+        wss.gs.makeCommand(SOCKET_COMMANDS.ACCEPT_GAME_LAUNCH, {
           socketId: playerId,
         })
       );
@@ -30,25 +36,25 @@ export const handleImposterMsg = (wss, ws, msg, recognizedByModule) => {
       }
       break;
     case SOCKET_COMMANDS.EXTEND_TIMER:
-      wss.gs.imposter.extendTimer(msg.socketId, msg.gameId);
+      domain.extendTimer(msg.socketId, msg.gameId);
       break;
     case SOCKET_COMMANDS.HURRY_UP:
-      wss.gs.imposter.hurryUp(msg.socketId, msg.gameId);
+      domain.hurryUp(msg.socketId, msg.gameId);
       break;
     case SOCKET_COMMANDS.TOGGLE_READY_STATE:
-      wss.gs.imposter.toggleReadyState(msg);
+      domain.toggleReadyState(msg);
       break;
     case SOCKET_COMMANDS.ACCUSE_PLAYER:
-      wss.gs.imposter.handleAccusePlayer(msg);
+      domain.handleAccusePlayer(msg);
       break;
     case SOCKET_COMMANDS.RETURN_TO_LOBBY:
-      wss.gs.imposter.handleLobbyReturnVote(msg);
+      domain.handleLobbyReturnVote(msg);
       break;
     case SOCKET_COMMANDS.CAST_VOTE:
-      wss.gs.imposter.castVote(msg);
+      domain.castVote(msg);
       break;
     case SOCKET_COMMANDS.IDENTIFY_SCENARIO:
-      wss.gs.imposter.identifyScenario(msg);
+      domain.identifyScenario(msg);
       break;
     default:
       recognizedByModule.imposter = false;

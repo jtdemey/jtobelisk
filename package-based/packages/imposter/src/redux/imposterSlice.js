@@ -8,8 +8,6 @@ import {
 } from "./imposterConstants";
 import { socket } from "../socket/socketClient";
 
-// TODO: consolidate all socket.send() calls into emitSocketMsg()
-
 export const imposterSlice = createSlice({
   name: "game",
   initialState: {
@@ -47,6 +45,7 @@ export const imposterSlice = createSlice({
       socket.send(
         JSON.stringify({
           command,
+          gameTitle: "imposter",
           ...action.payload,
         })
       );
@@ -59,6 +58,7 @@ export const imposterSlice = createSlice({
       state.notifications = state.notifications.concat([action.payload]);
     },
     assignScenario: (state, action) => {
+      console.log(action);
       state.condition = action.payload.condition;
       state.imposterId = action.payload.imposterId;
       state.roles = action.payload.roles;
@@ -70,6 +70,7 @@ export const imposterSlice = createSlice({
       socket.send(
         JSON.stringify({
           command,
+          gameTitle: "imposter",
           ...action.payload,
         })
       );
@@ -103,6 +104,7 @@ export const imposterSlice = createSlice({
         socket.send(
           JSON.stringify({
             command,
+            gameTitle: "imposter",
             ...action.payload,
           })
         );
@@ -134,6 +136,7 @@ export const imposterSlice = createSlice({
         socket.send(
           JSON.stringify({
             command,
+            gameTitle: "imposter",
             ...action.payload,
           })
         );
@@ -170,6 +173,7 @@ export const imposterSlice = createSlice({
       socket.send(
         JSON.stringify({
           command,
+          gameTitle: "imposter",
           ...action.payload,
         })
       );

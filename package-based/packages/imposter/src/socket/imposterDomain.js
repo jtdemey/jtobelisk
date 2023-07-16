@@ -8,40 +8,7 @@ import { rollScenario } from "./imposterScenarios.js";
 const createImposterDomain = (gameSuite) => {
   const domain = {};
 
-  domain.applyScenario = (state, scene) => {
-    const result = {
-      ...state,
-      imposterId: null,
-      scenario: scene.scenario,
-      scenarioList: scene.scenarioList,
-      condition: scene.condition,
-      roles: [],
-    };
-    const randomId =
-      state.players[Math.floor(Math.random() * state.players.length)].socketId;
-    gameSuite.logInfo(`Assigned imposter to ${randomId}`, state.gameId);
-    result.imposterId = randomId;
-    result.roles.push({
-      socketId: randomId,
-      role: "the imposter",
-    });
-    state.players.forEach((p) => {
-      if (p.socketId !== randomId) {
-        const role =
-          scene.roles[Math.floor(Math.random() * scene.roles.length)];
-        result.roles.push({
-          socketId: p.socketId,
-          role,
-        });
-        scene.roles = scene.roles.filter((r) => r !== role);
-      }
-    });
-    gameSuite.logInfo(
-      `Applied scenario ${scene.scenario} but ${scene.condition}.`,
-      state.gameId
-    );
-    return result;
-  };
+  domain.initialRemainingTime = 45;
 
   domain.castVote = (msg) => {
     const currGame = gameSuite.getGame(msg.gameId);
@@ -262,6 +229,41 @@ const createImposterDomain = (gameSuite) => {
     }
   };
 
+  const applyScenario = (state, scene) => {
+    const result = {
+      ...state,
+      imposterId: null,
+      scenario: scene.scenario,
+      scenarioList: scene.scenarioList,
+      condition: scene.condition,
+      roles: [],
+    };
+    const randomId =
+      state.players[Math.floor(Math.random() * state.players.length)].socketId;
+    gameSuite.logInfo(`Assigned imposter to ${randomId}`, state.gameId);
+    result.imposterId = randomId;
+    result.roles.push({
+      socketId: randomId,
+      role: "the imposter",
+    });
+    state.players.forEach((p) => {
+      if (p.socketId !== randomId) {
+        const role =
+          scene.roles[Math.floor(Math.random() * scene.roles.length)];
+        result.roles.push({
+          socketId: p.socketId,
+          role,
+        });
+        scene.roles = scene.roles.filter((r) => r !== role);
+      }
+    });
+    gameSuite.logInfo(
+      `Applied scenario ${scene.scenario} but ${scene.condition}.`,
+      state.gameId
+    );
+    return result;
+  };
+
   domain.iteratePhase = (game) => {
     switch (game.phase) {
       case PHASES.LOBBY:
@@ -277,7 +279,9 @@ const createImposterDomain = (gameSuite) => {
         } else {
           game.phase = PHASES.IN_GAME;
           game.remainingTime = 240;
-          game = gameSuite.imposter.applyScenario(game, rollScenario());
+          const scenario = rollScenario();
+          console.log(scenario);
+          game = applyScenario(game, scenario);
         }
         break;
       case PHASES.IN_GAME:
@@ -296,6 +300,15 @@ const createImposterDomain = (gameSuite) => {
     }
     return game;
   };
+
+  domain.makeGame = () => ({
+		imposterId: null,
+		scenario: null,
+		scenarioList: [],
+		condition: null,
+		roles: [], 
+		votes: []
+  });
 
   domain.removePlayer = (socketId, activeGame) => {
     if (!activeGame) return;

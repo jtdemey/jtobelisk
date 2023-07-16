@@ -47,7 +47,7 @@ export const PHASES = {
 };
 
 export const SOCKET_COMMANDS = {
-  ACCEPT_IMPOSTER_LAUNCH: "acceptImposterLaunch",
+  ACCEPT_GAME_LAUNCH: "acceptGameLaunch",
   ACCUSE_PLAYER: "accusePlayer",
   CAST_VOTE: "castVote",
   EXTEND_TIMER: "extendTimer",
@@ -56,7 +56,7 @@ export const SOCKET_COMMANDS = {
   IDENTIFY_SCENARIO: "identifyScenario",
   IMPOSTER_ERROR: "imposterError",
   INIT_GAME: "initGame",
-  LAUNCHED_IMPOSTER: "launchedImposter",
+  LAUNCH_GAME: "launchGame",
   PING: "ping",
   PONG: "pong",
   REFRESH_VOTES: "refreshVotes",

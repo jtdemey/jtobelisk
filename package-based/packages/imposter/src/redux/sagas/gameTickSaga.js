@@ -4,7 +4,7 @@ import {
   changeGameView,
   clearTempPhaseData,
   syncGameState,
-  updatePlayers,
+  updatePlayers
 } from "../imposterSlice";
 
 const PHASE_TO_VIEW = [
@@ -12,7 +12,7 @@ const PHASE_TO_VIEW = [
   4, //Ingame
   5, //Bystander win
   6, //Time expired
-  7, //Wrong accusation
+  7 //Wrong accusation
 ];
 
 const detectPlayersDelta = (ogPlayers, newPlayers) => {
@@ -35,27 +35,29 @@ const detectPlayersDelta = (ogPlayers, newPlayers) => {
 export function* gameTickSaga(action) {
   try {
     const gs = action.payload;
-    const deltas = yield select((state) => ({
-      phase: state.game.phase !== gs.phase,
-      players: detectPlayersDelta(state.game.players, gs.players),
-      scenario: state.game.scenario !== gs.scenario,
-    }));
     yield put(syncGameState(gs));
-    if (deltas.scenario) {
+    const scenarioDelta = yield select(state => state.game.scenario !== gs.scenario);
+    if (scenarioDelta) {
+      console.log(scenarioDelta);
       yield put(
         assignScenario({
           condition: gs.condition,
           imposterId: gs.imposterId,
           roles: gs.roles,
           scenario: gs.scenario,
-          scenarioList: gs.scenarioList,
+          scenarioList: gs.scenarioList
         })
       );
     }
-    if (deltas.players) {
+    const playersDelta = yield select(state => detectPlayersDelta(state.game.players, gs.players));
+    if (playersDelta) {
+      console.log(playersDelta);
       yield put(updatePlayers(gs.players));
     }
-    if (deltas.phase) {
+    const currentPhase = yield select(state => state.game.phase);
+    console.log(currentPhase, gs.phase);
+    if (currentPhase !== gs.phase) {
+      console.log('hit');
       yield put(clearTempPhaseData());
       yield put(changeGameView(PHASE_TO_VIEW[gs.phase]));
     }

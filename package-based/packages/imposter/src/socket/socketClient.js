@@ -11,7 +11,7 @@ import {
 export let socket = null;
 
 const initImposter = (dispatch) => {
-  console.log(import.meta.env.WEBSOCKET_URI);
+  console.log(import.meta.env.VITE_WEBSOCKET_URI);
   const socketUrl =
     import.meta.env.WEBSOCKET_URI || "ws://localhost:3000/";
   socket = new WebSocket(socketUrl);
@@ -19,21 +19,21 @@ const initImposter = (dispatch) => {
 
   socket.onopen = () => {
     const launchCommand = {
-      command: SOCKET_COMMANDS.LAUNCHED_IMPOSTER,
+      command: SOCKET_COMMANDS.LAUNCH_GAME,
       gameTitle: "imposter"
     };
     //TODO: Handle reconnecting
     /*const storedId = window.localStorage.getItem('JTD_imposterSocketId');
-		if(storedId) {
-			const lastSeen = parseDateStr(window.localStorage.getItem('JTD_imposterHourLastSeen'));
-			console.log(Math.abs(new Date().getTime() - lastSeen.getTime()));
-			const validToRejoin = Math.abs(new Date().getTime() - lastSeen.getTime()) < 60000;
-			if(validToRejoin) {
-				socketId = storedId;
-				launchCommand.cachedSocketId = storedId;
-				console.log(`Welcome back, ${storedId}`);
-			}
-		}*/
+    if(storedId) {
+      const lastSeen = parseDateStr(window.localStorage.getItem('JTD_imposterHourLastSeen'));
+      console.log(Math.abs(new Date().getTime() - lastSeen.getTime()));
+      const validToRejoin = Math.abs(new Date().getTime() - lastSeen.getTime()) < 60000;
+      if(validToRejoin) {
+        socketId = storedId;
+        launchCommand.cachedSocketId = storedId;
+        console.log(`Welcome back, ${storedId}`);
+      }
+    }*/
     console.log(`Socket connection established.`);
     socket.send(JSON.stringify(launchCommand));
   };
@@ -55,7 +55,7 @@ const initImposter = (dispatch) => {
       console.debug(`\tGot command "${msg.command}"`);
     }
     switch (msg.command) {
-      case SOCKET_COMMANDS.ACCEPT_IMPOSTER_LAUNCH:
+      case SOCKET_COMMANDS.ACCEPT_GAME_LAUNCH:
         console.log(
           `Successful handshake with GameSuite - welcome, player ${msg.socketId}.`
         );
@@ -66,7 +66,7 @@ const initImposter = (dispatch) => {
         dispatch(initGame(msg.gameState));
         break;
       case SOCKET_COMMANDS.PING:
-        socket.send(JSON.stringify({ command: "pong", socketId }));
+        socket.send(JSON.stringify({ command: "pong", gameTitle: "imposter", socketId }));
         break;
       case SOCKET_COMMANDS.GAME_TICK:
         dispatch(gameTick(msg.gameState));
@@ -94,6 +94,7 @@ const initImposter = (dispatch) => {
     socket.send(
       JSON.stringify({
         command: SOCKET_COMMANDS.SOCKET_DISCONNECT,
+        gameTitle: "imposter",
         socketId: socketId,
       })
     );

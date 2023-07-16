@@ -4,6 +4,8 @@ import { CORE_SOCKET_COMMANDS } from "./socketCommands.js";
 import { handlePong, pingPlayers } from "./playerCleaner.js";
 import createImposterModule from "./gamemodules/imposterModule.js";
 
+const MAX_PLAYERS = 64;
+
 export const makeGameSuite = () => {
   const gameSuite = {};
 
@@ -14,10 +16,12 @@ export const makeGameSuite = () => {
    *     handleSubmitJoinGame?: (msg: { socketId: string, playerName?: string }, currentGame: Game, currentPlayer: Player) => void;
    *     initialRemainingTime?: number;
    *     iteratePhase: (game: Game) => void;
+   *     makeGame: (hostSocketId: string) => void;
    *     removePlayer: (socketId: string, activeGame: Game) => void;
    *   }
    *
-   *  Todo: Move everything custom to domains
+   *  TODO: Handle submit form errors so players don't get falsely added
+   *  TODO: memoize selectors, ugh
    */
 
   //Fields
@@ -70,7 +74,9 @@ export const makeGameSuite = () => {
   };
 
   gameSuite.makeGame = (moduleName) => {
+    console.log("getting game module " + moduleName);
     const currentModule = gameSuite.getGameModule(moduleName);
+    console.log(currentModule);
     return {
       gameId: genGameId(),
       gameTitle: moduleName,
@@ -80,7 +86,7 @@ export const makeGameSuite = () => {
       phase: 0,
       remainingTime: currentModule.initialRemainingTime || 45,
       tick: 0,
-      ...currentModule.makeGame(),
+      ...currentModule.domain.makeGame(),
     };
   };
 
@@ -168,7 +174,10 @@ export const makeGameSuite = () => {
     const m = gameSuite.gameModules[moduleName];
     if (!m) {
       gameSuite.logError(`Could not get game module ${moduleName}`);
-      return false;
+      return {
+        controller: () => {},
+        domain: {}
+      };
     }
     return m;
   };
@@ -222,6 +231,12 @@ export const makeGameSuite = () => {
   };
 
   gameSuite.addPlayer = (player, debug = false) => {
+    if (gameSuite.playerList.length >= MAX_PLAYERS) {
+      gameSuite.logError(
+        `Could not add player ${player.socketId}: max players exceeded`
+      );
+      return;
+    }
     gameSuite.playerList = gameSuite.playerList.concat([player]);
     if (debug) {
       gameSuite.logInfo(
@@ -256,10 +271,10 @@ export const makeGameSuite = () => {
           players: activeGame.players.filter((p) => p.socketId !== socketId),
         });
       }
-    }
-    const currentModule = gameSuite.getGameModule(activeGame.gameTitle);
-    if (currentModule.removePlayer) {
-      currentModule.removePlayer(socketId, activeGame);
+      const currentModule = gameSuite.getGameModule(activeGame.gameTitle || "[no module specified]");
+      if (currentModule.domain.removePlayer) {
+        currentModule.domain.removePlayer(socketId, activeGame);
+      }
     }
     gameSuite.playerList = gameSuite.playerList.filter(
       (p) => p.socketId !== socketId
@@ -298,7 +313,7 @@ export const makeGameSuite = () => {
       game.players[i].isReady = false;
     }
     const currentModule = gameSuite.getGameModule(g.gameTitle);
-    currentModule.iteratePhase(g);
+    currentModule.domain.iteratePhase(g);
     return g;
   };
 
@@ -311,6 +326,12 @@ export const makeGameSuite = () => {
     }
     tick++;
     return tick;
+  };
+
+  const stripServerGameProperties = (game) => {
+    const stripSocketProperty = (players) =>
+      players.map((p) => ({ ...p, socket: null }));
+    return { ...game, players: stripSocketProperty(game.players) };
   };
 
   gameSuite.startGameClock = () => {
@@ -329,7 +350,7 @@ export const makeGameSuite = () => {
         gameSuite.emitToGame(
           g.gameId,
           gameSuite.makeCommand(CORE_SOCKET_COMMANDS.GAME_TICK, {
-            gameState: g,
+            gameState: stripServerGameProperties(g),
           })
         );
       }
@@ -349,22 +370,34 @@ export const makeGameSuite = () => {
     }, 3000);
   };
 
+  //Event handlers
+  gameSuite.handleLaunchGame = (socket) => {
+    const player = gameSuite.makePlayer(socket);
+    gameSuite.addPlayer(player, true);
+    return player.socketId;
+  };
+
   const truncateName = (raw) => (raw.length > 24 ? raw.substring(0, 24) : raw);
 
-  //Form Handlers
+  //Form handlers
   gameSuite.handleSubmitHostGame = (msg) => {
+    console.log(msg);
+    if (!msg.gameTitle || !msg.socketId) {
+      gameSuite.logError("Failed to host game: gameTitle or socketId missing");
+      return;
+    }
     const newGame = gameSuite.makeGame(msg.gameTitle);
     const hostPlayer = gameSuite.updatePlayer(msg.socketId, {
       gameId: newGame.gameId,
       name: truncateName(msg.playerName) || "Dingus",
     });
+    const currentModule = gameSuite.getGameModule(msg.gameTitle);
+    if (currentModule.domain.handleSubmitHostGame) {
+      currentModule.domain.handleSubmitHostGame(msg, newGame, hostPlayer);
+    }
     newGame.host = hostPlayer.socketId;
     newGame.players = newGame.players.concat([hostPlayer]);
     gameSuite.addGame(newGame, true);
-    const currentModule = gameSuite.getGameModule(msg.gameTitle);
-    if (currentModule.handleSubmitHostGame) {
-      currentModule.handleSubmitHostGame(msg, newGame, hostPlayer);
-    }
     gameSuite.logInfo(`Host game submitted by ${msg.socketId}`);
     return newGame;
   };
@@ -385,21 +418,26 @@ export const makeGameSuite = () => {
   };
 
   gameSuite.handleSubmitJoinGame = (msg) => {
+    // TODO: handle no game globally here instead of domains?
+    if (!msg.gameTitle || !msg.socketId) {
+      gameSuite.logError("Failed to host game: gameTitle or socketId missing");
+      return;
+    }
     const targetGame = gameSuite.getGame(msg.gameId.toUpperCase());
     let rawName = truncateName(msg.playerName) || "Dingus";
-    const playerName = getOriginalName(rawName.trim(), targetGame.players);
+    const playerName = getOriginalName(rawName.trim(), targetGame?.players || []);
     const joiner = gameSuite.updatePlayer(msg.socketId, {
       gameId: msg.gameId.toUpperCase(),
       name: playerName,
     });
+    const currentModule = gameSuite.getGameModule(msg.gameTitle);
+    if (currentModule.domain.handleSubmitJoinGame) {
+      currentModule.domain.handleSubmitJoinGame(msg, targetGame, joiner);
+    }
     const newPlayers = targetGame.players.concat([joiner]);
     gameSuite.updateGame(msg.gameId, {
       players: newPlayers,
     });
-    const currentModule = gameSuite.getGameModule(msg.gameTitle);
-    if (currentModule.handleSubmitJoinGame) {
-      currentModule.handleSubmitJoinGame(msg, targetGame, joiner);
-    }
     gameSuite.logInfo(`Join game submitted by ${msg.socketId}`);
     return {
       ...targetGame,
@@ -410,7 +448,6 @@ export const makeGameSuite = () => {
   //Message handler
   gameSuite.handleSocketMsg = (wss, ws, raw) => {
     const msg = wss.gs.parseRes(raw);
-    console.log(msg);
     if (msg.command !== "ping" && msg.command !== "pong") {
       gameSuite.logInfo(
         `${msg.socketId ? `Socket ${msg.socketId}` : `New player`} says ${
@@ -419,8 +456,18 @@ export const makeGameSuite = () => {
       );
     }
     let recognizedByModule = ["core", ...Object.keys(gameSuite.gameModules)];
-    //Core handler
+    //Core message handler
     switch (msg.command) {
+      case CORE_SOCKET_COMMANDS.LAUNCH_GAME:
+        const player = gameSuite.makePlayer(ws);
+        gameSuite.addPlayer(player, true);
+        gameSuite.emitToPlayer(
+          player.socketId,
+          wss.gs.makeCommand(CORE_SOCKET_COMMANDS.ACCEPT_GAME_LAUNCH, {
+            socketId: player.socketId,
+          })
+        );
+        break;
       case CORE_SOCKET_COMMANDS.PONG:
         handlePong(msg.socketId);
         break;
@@ -431,21 +478,21 @@ export const makeGameSuite = () => {
         recognizedByModule = recognizedByModule.filter((x) => x !== "core");
         break;
     }
-    const currentPlayer = gameSuite.getPlayer(msg.socketId);
-    const currentGame = gameSuite.getGame(currentPlayer.gameId);
-    const currentModule = gameSuite.getGameModule(currentGame.gameTitle);
-    console.log(currentModule);
-    currentModule.controller(wss, ws, msg, recognizedByModule);
+    if (msg.socketId && msg.gameTitle) {
+      const currentModule = gameSuite.getGameModule(msg.gameTitle);
+      if (currentModule) {
+        currentModule.controller(wss, ws, msg, recognizedByModule);
+      } else {
+        gameSuite.logError(`Module ${msg.gameTitle} not recognized`);
+      }
+    }
     if (recognizedByModule.length < 1) {
-      gameSuite.logError(`Socket command '${msg.command}' not recognized.`);
+      gameSuite.logError(`Socket command '${msg.command}' not recognized`);
     }
   };
 
   const verifyModules = () => {
-    const propsToCheck = [
-      "iteratePhase",
-      "removePlayer",
-    ];
+    const propsToCheck = ["iteratePhase", "makeGame", "removePlayer"];
     Object.keys(gameSuite.gameModules).forEach((moduleName) => {
       let checksOut = true;
       const currentModule = gameSuite.gameModules[moduleName];
