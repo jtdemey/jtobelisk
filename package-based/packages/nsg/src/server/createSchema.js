@@ -10,7 +10,7 @@ import { executeTransaction } from "./db.js";
  *    - Optional comma-delimited tags
  */
 
-const createDb = () => executeTransaction(`CREATE TABLE IF NOT EXISTS gamedocs (
+const createDb = () => executeTransaction(`CREATE TABLE IF NOT EXISTS docs (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   body TEXT NULL,
   endpoint TEXT NOT NULL,
