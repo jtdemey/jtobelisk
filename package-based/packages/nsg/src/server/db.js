@@ -2,7 +2,7 @@ import Database from "better-sqlite3";
 
 export const removeNewlines = input => input;
 
-const db = new Database("da.db");
+const db = new Database("nsg.db", { verbose: console.log });
 db.pragma("journal_mode = WAL");
 
 export const executeTransaction = (query, entity) => {
