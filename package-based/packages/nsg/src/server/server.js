@@ -1,29 +1,39 @@
 import express from "express";
+import fs from "fs";
 import path from "path";
-import db from "./db";
+
+const PORT = 3000;
 
 const app = express();
 
-app.get("/", function (_, res) {
+app.get("/", (_, res) => {
   res.redirect("/home");
 });
 
-const docs = db.prepare("SELECT * FROM docs").all();
-const verifyDoc = doc => {
-  ["id", "body", "endpoint", "tags", "title"].forEach(attr => {
-    if (!doc.attr) {
-      stderr.write(`No attribute ${attr} found on doc ${doc.title || "no title"}`);
+const distPath = path.join(process.cwd(), "dist");
+const pagesPath = path.join(distPath, "pages");
+
+const addRoutesForDirectory = dirPath => {
+  const files = fs.readdirSync(dirPath);
+  files.forEach(fileName => {
+    const filePath = path.join(dirPath, fileName);
+    const stats = fs.statSync(filePath);
+    if (stats.isDirectory()) {
+      addRoutesForDirectory(filePath);
+      return;
     }
+    const endpoint = filePath.replace(pagesPath, "").replace(".html", "");
+    app.get(endpoint, (_, res) => {
+      res.sendFile(filePath);
+    });
+    process.stdout.write(`Added route ${endpoint}\n`);
   });
 };
 
-docs.forEach(doc => {
-  verifyDoc(doc);
-  app.get(doc.endpoint, (_, res) => {
-    res.sendFile(path.join(process.cwd(), "dist/pages", `${doc.endpoint}.html`));
-  });
-  stdout.write(`Added route ${doc.endpoint} for ${doc.title}`);
-});
+addRoutesForDirectory(pagesPath);
 
+app.use("/assets", express.static(path.join(distPath, "assets")));
+app.use("/styles", express.static(path.join(distPath, "styles")));
 
-app.listen(3000);
+app.listen(PORT);
+process.stdout.write(`Server listening on ${PORT}\n`);

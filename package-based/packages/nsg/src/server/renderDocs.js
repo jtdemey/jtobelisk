@@ -7,13 +7,26 @@ import { marked } from "marked";
 import path from "path";
 import postcss from "postcss";
 
-// Key = endpoint
+// Optional overrides where key = endpoint
 const TAGS = {
   "/home": "main",
   "/toc": "main,navigation"
 };
+
 const TITLES = {
   "/toc": "Table of Contents"
+};
+
+const capitalize = str => `${str.charAt(0).toUpperCase()}${str.substring(1)}`;
+
+const clearAndCreateDist = () => {
+  const distPath = path.join(process.cwd(), "dist");
+  fs.rmSync(distPath, { force: true, recursive: true });
+  process.stdout.write(`ᕦ(ò_óˇ)ᕤ Deleted dist directory\n`);
+  fs.mkdirSync(distPath);
+  fs.mkdirSync(`${distPath}/pages`);
+  fs.mkdirSync(`${distPath}/styles`);
+  process.stdout.write(`[o_o] Created empty dist directory\n`);
 };
 
 const getHash = str => {
@@ -21,13 +34,32 @@ const getHash = str => {
   return hash.substring(hash.length - 8);
 };
 
-const getTitle = endpoint =>
-  TITLES[endpoint] ||
-  `<h1>${endpoint
-    .replace(`${process.cwd()}/docs`, "")
-    .replace(".md", "")}</h1>`;
+const getTitle = endpoint => {
+  const splitEndpoint = endpoint.split("/");
+  const docTitle = splitEndpoint[splitEndpoint.length - 1].replace(".md", "");
+  const override = TITLES[endpoint];
+  return override ? `<h1>${override}</h1>` : `<h1>${capitalize(docTitle)}</h1>`;
+};
 
-const renderMarkdownFile = mdFilePath => {
+const renderCss = async () => {
+  const srcContent = fs.readFileSync(
+    path.join(process.cwd(), "src/styles/look.css"),
+    "utf8"
+  );
+  const processedStyles = await postcss([autoprefixer, cssnano]).process(
+    srcContent,
+    { from: undefined }
+  );
+  const fileName = `look-${getHash(processedStyles.css)}.css`;
+  fs.writeFileSync(
+    path.join(process.cwd(), "dist/styles", fileName),
+    processedStyles.css
+  );
+  process.stdout.write(`♪ヽ( ⌒o⌒)♪ Styles written to ${fileName}\n`);
+  return fileName;
+};
+
+const renderMarkdownFile = (mdFilePath, styleFileName) => {
   const endpoint = mdFilePath
     .replace(`${process.cwd()}/docs`, "")
     .replace(".md", "");
@@ -37,53 +69,49 @@ const renderMarkdownFile = mdFilePath => {
     mangle: false
   });
 
-  const template = path.join(process.cwd(), "src/pages/template.ejs");
   const doc = {
     body: html,
     endpoint,
+    styleFileName,
     tags: TAGS[endpoint] || "",
-    title: getTitle(mdFilePath)
+    title: getTitle(endpoint)
   };
 
-  ejs.renderFile(template, doc, {}, (err, str) => {
-    if (err) {
-      process.stderr.write(`Error rendering ${doc.title}\n`);
-      return;
+  ejs.renderFile(
+    path.join(process.cwd(), "src/pages/template.ejs"),
+    doc,
+    {},
+    (err, str) => {
+      if (err) {
+        process.stderr.write(`Error rendering ${doc.title}\n`);
+        throw new Error(err);
+      }
+      const destinationPath = mdFilePath
+        .replace("docs", "dist/pages")
+        .replace(".md", ".html");
+      fs.writeFileSync(destinationPath, str);
+      process.stdout.write(`/(o.o)/ Wrote endpoint ${endpoint}\n`);
     }
-    const destinationPath = mdFilePath
-      .replace("docs", "dist/pages")
-      .replace(".md", ".html");
-    fs.writeFileSync(destinationPath, str);
-    process.stdout.write(`Rendered ${endpoint} to ${destinationPath}\n`);
-  });
+  );
 };
 
-const renderDirectory = dirPath => {
+const renderDirectory = (dirPath, styleFileName) => {
   const dir = fs.readdirSync(dirPath);
   dir.forEach(fileName => {
-    const file = path.join(docPath, fileName);
+    const file = path.join(dirPath, fileName);
     const stats = fs.statSync(file);
     if (stats.isDirectory()) {
-      renderDirectory(file);
+      fs.mkdirSync(file.replace("docs", "dist/pages"));
+      renderDirectory(file, styleFileName);
       return;
     }
-    renderMarkdownFile(file);
+    renderMarkdownFile(file, styleFileName);
   });
 };
 
-const renderCss = async () => {
-  const lookPath = path.join(process.cwd(), "src/styles/look.css");
-  const lookContent = fs.readFileSync(lookPath, "utf8");
-  const processedStyles = await postcss([autoprefixer, cssnano]).process(
-    lookContent,
-    { from: undefined }
-  );
-  const css = processedStyles.css;
-  const contentHash = getHash(css);
-  const fileName = path.join(process.cwd(), "dist", `look-${contentHash}.css`);
-  fs.writeFileSync(fileName, css);
-};
-
-const docPath = path.join(process.cwd(), "docs");
-// renderDirectory(docPath);
-renderCss();
+clearAndCreateDist();
+const styleFileName = await renderCss();
+const docDirectory = path.join(process.cwd(), "docs");
+process.stdout.write(`ة_ة Preparing to render docs in ${docDirectory}\n...\n`);
+renderDirectory(docDirectory, styleFileName);
+process.stdout.write("...\nDone! \\(^-^)/\n");
