@@ -122,12 +122,47 @@ table {
   border-spacing: 0;
 }
 
+/*
+--primary: hsl(293, 86%, 20%);
+--secondary: hsl(95, 62%, 24%);
+--accent: hsl(95, 80%, 36%);
+*/
+
 html,
 body {
   width: 100%;
   height: 100%;
 }
 
-#site-wrapper {
-  background: purple;
+a {
+  color: hsl(95, 80%, 36%);
+}
+
+h1 {
+  font-family: sans-serif;
+  font-size: 5.5rem;
+}
+
+h6 {
+  font-family: sans-serif;
+  font-size: 2.2rem;
+}
+
+#wrapper {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  padding: 1rem 3rem;
+  background: hsl(287, 75%, 5%);
+  color: hsl(120, 57%, 92%);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#content {
+  font-family: serif;
+  font-size: 1.35rem;
+  line-height: 1.75rem;
 }

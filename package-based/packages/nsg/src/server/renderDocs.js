@@ -14,6 +14,7 @@ const TAGS = {
 };
 
 const TITLES = {
+  "/home": "The Neodigital Survival Guide",
   "/toc": "Table of Contents"
 };
 

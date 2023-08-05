@@ -9,10 +9,13 @@
     <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
   </head>
   <body>
-    <div class="wrapper">
+    <main id="wrapper">
       <%- title %>
-      <%- body %>
-    </div>
+
+      <article id="content">
+        <%- body %>
+      </article>
+    </main>
     <script src="/scripts/index.js" type="module"></script>
   </body>
 </html>
