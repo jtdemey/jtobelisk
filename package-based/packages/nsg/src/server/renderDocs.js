@@ -18,17 +18,8 @@ const TITLES = {
   "/toc": "Table of Contents"
 };
 
+// Utilities
 const capitalize = str => `${str.charAt(0).toUpperCase()}${str.substring(1)}`;
-
-const clearAndCreateDist = () => {
-  const distPath = path.join(process.cwd(), "dist");
-  fs.rmSync(distPath, { force: true, recursive: true });
-  process.stdout.write(`ᕦ(ò_óˇ)ᕤ Deleted dist directory\n`);
-  fs.mkdirSync(distPath);
-  fs.mkdirSync(`${distPath}/pages`);
-  fs.mkdirSync(`${distPath}/styles`);
-  process.stdout.write(`[o_o] Created empty dist directory\n`);
-};
 
 const getHash = str => {
   const hash = crypto.createHash("md5").update(str).digest("hex");
@@ -42,6 +33,19 @@ const getTitle = endpoint => {
   return override ? `<h1>${override}</h1>` : `<h1>${capitalize(docTitle)}</h1>`;
 };
 
+// Prep
+const clearAndCreateDist = () => {
+  const distPath = path.join(process.cwd(), "dist");
+  fs.rmSync(distPath, { force: true, recursive: true });
+  process.stdout.write(`ᕦ(ò_óˇ)ᕤ Deleted dist directory\n`);
+  fs.mkdirSync(distPath);
+  fs.mkdirSync(`${distPath}/pages`);
+  fs.mkdirSync(`${distPath}/styles`);
+  fs.mkdirSync(`${distPath}/styles/fonts`);
+  process.stdout.write(`[o_o] Created empty dist directory\n`);
+};
+
+// Styles
 const renderCss = async () => {
   const srcContent = fs.readFileSync(
     path.join(process.cwd(), "src/styles/look.css"),
@@ -60,6 +64,19 @@ const renderCss = async () => {
   return fileName;
 };
 
+const copyFonts = () => {
+  const fontDirectory = fs.readdirSync(
+    path.join(process.cwd(), "src/styles/fonts/")
+  );
+  fontDirectory.forEach(fontFile => {
+    fs.copyFileSync(
+      path.join(process.cwd(), "src/styles/fonts", fontFile),
+      path.join(process.cwd(), "dist/styles/fonts/", fontFile)
+    );
+  });
+};
+
+// Markdown to HTML
 const renderMarkdownFile = (mdFilePath, styleFileName) => {
   const endpoint = mdFilePath
     .replace(`${process.cwd()}/docs`, "")

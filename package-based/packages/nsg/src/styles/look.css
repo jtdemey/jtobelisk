@@ -122,6 +122,11 @@ table {
   border-spacing: 0;
 }
 
+@font-face {
+  font-family: "CrimsonPro";
+  src: url("styles/fonts/CrimsonPro-VariableFont_wght.ttf") format("truetype");
+}
+
 /*
 --primary: hsl(293, 86%, 20%);
 --secondary: hsl(95, 62%, 24%);
@@ -135,17 +140,23 @@ body {
 }
 
 a {
-  color: hsl(95, 80%, 36%);
+  color: hsl(95, 50%, 36%);
 }
 
 h1 {
+  padding-left: 13px;
   font-family: sans-serif;
-  font-size: 5.5rem;
+  font-size: 5.3rem;
 }
 
 h6 {
+  padding-left: 26px;
   font-family: sans-serif;
   font-size: 2.2rem;
+}
+
+p {
+  font-family: "CrimsonPro";
 }
 
 #wrapper {
@@ -165,4 +176,10 @@ h6 {
   font-family: serif;
   font-size: 1.35rem;
   line-height: 1.75rem;
+}
+
+@media all and (min-width: 768px) {
+  #content {
+    padding: 26px 40% 26px 26px;
+  }
 }
