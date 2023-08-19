@@ -141,6 +141,19 @@ body {
 
 a {
   color: hsl(95, 50%, 36%);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: bold;
 }
 
 h1 {
@@ -156,7 +169,20 @@ h6 {
 }
 
 p {
-  font-family: "CrimsonPro";
+  padding: 1.3rem 0;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+ol > li, ul > li {
+  margin-left: 1.3rem;
+}
+
+ul {
+  padding: 1.3rem 0;
+  list-style-type: disc;
 }
 
 #wrapper {
@@ -173,7 +199,7 @@ p {
 }
 
 #content {
-  font-family: serif;
+  font-family: "CrimsonPro", serif;
   font-size: 1.35rem;
   line-height: 1.75rem;
 }
