@@ -13,8 +13,5 @@ export default defineConfig({
 		}
 	},
 	publicDir: "../public",
-	root: "src",
-	server: {
-		open: "home.html"
-	}
+	root: "src"
 });
