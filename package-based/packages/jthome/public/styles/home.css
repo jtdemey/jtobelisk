@@ -498,14 +498,7 @@ strong {
   scroll-behavior: smooth;
 }
 
-#home-main {
-  width: 100%;
-  height: 100%;
-  background: hsl(359, 20%, 9%);
-  color: hsl(208, 10%, 90%);
-}
-
-.home-container {
+.software-container {
   background: #4b4e6d;
 }
 
@@ -516,7 +509,34 @@ strong {
 .default-cursor {
   cursor: default;
 }
-/* background: linear-gradient(#545778, #494c69, #3f415a); */
+
+/* HOME ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+#home-main {
+  width: 100%;
+  height: 100%;
+  background: hsl(359, 20%, 9%);
+  color: hsl(208, 10%, 90%);
+}
+
+#home-title-area {
+  display: flex;
+  flex-flow: column;
+  padding: 64px 32px;
+  text-align: left;
+}
+
+#home-title-area > h1 {
+  font-size: 4rem;
+  -webkit-animation: fadein-now 0.5s ease-out 0.12s 1;
+  -moz-animation: fadein-now 0.5s ease-out 0.12s 1;
+  -o-animation: fadein-now 0.5s ease-out 0.12s 1;
+  animation: fadein-now 0.5s ease-out 0.12s 1;
+  animation-fill-mode: forwards;
+}
+
+#home-nav {
+  padding: 0px 32px;
+}
 
 /* BANNER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 .header-container {
@@ -574,39 +594,6 @@ strong {
   -o-animation: fadein-now 0.5s ease-out 0.18s 1;
   animation: fadein-now 0.5s ease-out 0.18s 1;
   animation-fill-mode: forwards;
-}
-
-.jd-title3 {
-  -webkit-animation: fadein-now 0.5s ease-out 0.22s 1;
-  -moz-animation: fadein-now 0.5s ease-out 0.22s 1;
-  -o-animation: fadein-now 0.5s ease-out 0.22s 1;
-  animation: fadein-now 0.5s ease-out 0.22s 1;
-  animation-fill-mode: forwards;
-}
-
-.subtitle-area {
-  position: absolute;
-  right: 0.75em;
-  height: inherit;
-}
-
-.jd-subtitle {
-  font-family: "Abel", sans-serif;
-  font-size: 1.5em;
-  display: flex;
-  align-items: center;
-  text-align: right;
-  overflow: hidden;
-  margin-top: 2em;
-  margin-right: 2em;
-}
-
-/* CONTROL BUTTONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.control-btns {
-  position: fixed;
-  top: 0;
-  right: 0;
-  padding: 10px;
 }
 
 /* MOBILE NAV ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
