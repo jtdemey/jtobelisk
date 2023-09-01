@@ -1,5 +1,5 @@
 const loadDoodle = async (ind, isPreview) => {
-  const uri = `${window.location.origin}/doodles/`;
+  const uri = `${window.location.origin}/img/doodles/`;
   const dood = new Image();
   dood.src = `${uri}${isPreview ? 'thumbs/' : ''}img${ind}.webp`;
 
