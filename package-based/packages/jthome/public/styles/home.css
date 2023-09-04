@@ -565,6 +565,7 @@ strong {
 }
 
 #home-nav {
+  display: flex;
   padding: 0px 32px;
   font-family: "Abel", sans-serif;
   font-size: 1.5rem;
