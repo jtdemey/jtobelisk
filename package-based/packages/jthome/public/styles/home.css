@@ -123,6 +123,33 @@ table {
   border-spacing: 0;
 }
 
+@font-face {
+  font-family: "Abel";
+  src: url("/fonts/Abel-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Ubuntu";
+  src: url("/fonts/Ubuntu-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Ubuntu";
+  font-style: bold;
+  src: url("/fonts/Ubuntu-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Vollkorn";
+  src: url("/fonts/Vollkorn-VariableFont_wght.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Vollkorn";
+  font-style: italic;
+  src: url("/fonts/Vollkorn-Italic-VariableFont_wght.ttf") format("truetype");
+}
+
 @-webkit-keyframes fadein-now {
   0% {
     opacity: 0;
@@ -526,6 +553,7 @@ strong {
 }
 
 #home-title-area > h1 {
+  font-family: "Abel", sans-serif;
   font-size: 4rem;
   -webkit-animation: fadein-now 0.5s ease-out 0.12s 1;
   -moz-animation: fadein-now 0.5s ease-out 0.12s 1;
