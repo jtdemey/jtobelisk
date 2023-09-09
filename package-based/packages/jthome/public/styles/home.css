@@ -539,8 +539,8 @@ strong {
 
 /* HOME ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 #home-main {
-  display: flex;
-  flex-flow: column;
+  display: grid;
+  grid-template-rows: 1fr 3fr;
   width: 100%;
   height: 100%;
   background: hsl(359, 20%, 9%);
@@ -557,6 +557,14 @@ strong {
 #home-title-area > h1 {
   font-family: "Abel", sans-serif;
   font-size: 4rem;
+  -webkit-animation: fadein-now 0.75s ease-out 0.12s 1;
+  -moz-animation: fadein-now 0.75s ease-out 0.12s 1;
+  -o-animation: fadein-now 0.75s ease-out 0.12s 1;
+  animation: fadein-now 0.75s ease-out 0.12s 1;
+  animation-fill-mode: forwards;
+}
+
+#home-title-area > h1:first-child {
   -webkit-animation: fadein-now 0.5s ease-out 0.12s 1;
   -moz-animation: fadein-now 0.5s ease-out 0.12s 1;
   -o-animation: fadein-now 0.5s ease-out 0.12s 1;
@@ -566,9 +574,17 @@ strong {
 
 #home-nav {
   display: flex;
-  padding: 0px 32px;
+  justify-content: right;
+  align-items: end;
+  padding: 0px 32px 64px;
   font-family: "Abel", sans-serif;
   font-size: 1.5rem;
+}
+
+#home-nav > ul > li {
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  background: hsl(208, 10%, 90%);
 }
 
 /* BANNER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
