@@ -1,4 +1,4 @@
-import homeUiState from "../jthome/uiState.js";
+import homeUiState from "../lib/uiState.js";
 
 const uiState = {
   ...homeUiState,

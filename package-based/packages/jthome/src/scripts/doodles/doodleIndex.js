@@ -9,7 +9,5 @@ const setBtnListener = () => {
 };
 
 //Init
-(() => {
-  loadDoodles(4, uiState);
-  setBtnListener();
-})();
+loadDoodles(4, uiState);
+setBtnListener();
