@@ -577,14 +577,35 @@ strong {
   justify-content: right;
   align-items: end;
   padding: 0px 32px 64px;
+  color: hsl(174, 22%, 9%);
   font-family: "Abel", sans-serif;
   font-size: 1.5rem;
 }
 
-#home-nav > ul > li {
+#home-nav > ul {
+  position: absolute;
+  z-index: 1;
+}
+
+#home-nav > ul > a {
+  text-decoration: none;
+  color: hsl(240, 20%, 6%);
+}
+
+#home-nav > ul > a > li {
   margin: 1rem 0;
   padding: 0.5rem 1rem;
   background: hsl(208, 10%, 90%);
+}
+
+#eye {
+  display: block;
+  position: absolute;
+  left: 0px;
+  bottom: 240px;
+  width: 240px;
+  height: 240px;
+  z-index: 0;
 }
 
 /* BANNER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
