@@ -576,6 +576,7 @@ strong {
   display: flex;
   justify-content: right;
   align-items: end;
+  margin: 0px;
   padding: 0px 32px 64px;
   color: hsl(174, 22%, 9%);
   font-family: "Abel", sans-serif;
@@ -602,7 +603,7 @@ strong {
   display: block;
   position: absolute;
   left: 0px;
-  bottom: 240px;
+  bottom: 40px;
   width: 240px;
   height: 240px;
   z-index: 0;
