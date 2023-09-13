@@ -59,28 +59,33 @@ const changeAnimation = (nextAnimation) => {
   animation = nextAnimation;
 };
 
-const startEyeAnimation = (bitmap, canvas, context) => {
-  interval = window.setInterval(() => {
+const checkToAwaken = () => {
+  if (!hasAwoken) {
+    window.setTimeout(() => {
+      changeAnimation("neutral");
+      hasAwoken = true;
+    }, FRAME_INTERVAL * FRAMES["awaken"].length - 2);
+  }
+};
 
-    if (!hasAwoken) {
+const checkToBlink = () => {
+  if (hasAwoken && blinked) {
+    blinked = false;
+    const nextBlink = Math.floor(Math.random() * 8) * 1000 + 2000;
+    window.setTimeout(() => {
+      changeAnimation("blink");
       window.setTimeout(() => {
         changeAnimation("neutral");
-        hasAwoken = true;
-      }, FRAME_INTERVAL * FRAMES["awaken"].length - 2);
-    }
+        blinked = true;
+      }, FRAME_INTERVAL * FRAMES["blink"].length + 2);
+    }, nextBlink);
+  }
+};
 
-    if (hasAwoken && blinked) {
-      blinked = false;
-      const nextBlink = Math.floor(Math.random() * 8) * 1000 + 2000;
-      window.setTimeout(() => {
-        changeAnimation("blink");
-        window.setTimeout(() => {
-          changeAnimation("neutral");
-          blinked = true;
-        }, FRAME_INTERVAL * FRAMES["blink"].length + 2);
-      }, nextBlink);
-    }
-
+const startEyeAnimation = (bitmap, canvas, context) => {
+  interval = window.setInterval(() => {
+    checkToAwaken();
+    checkToBlink();
     const activeFrames = FRAMES[animation];
     if (frameIndex > activeFrames.length - 1) {
       frameIndex = 0;
@@ -90,7 +95,6 @@ const startEyeAnimation = (bitmap, canvas, context) => {
     const offset = -240;
     context.drawImage(bitmap, offset * frame[1], offset * frame[0]);
     frameIndex++;
-
   }, FRAME_INTERVAL);
 };
 
