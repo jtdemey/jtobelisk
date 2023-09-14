@@ -12,7 +12,7 @@ const contentViews = document.querySelectorAll(".content-view");
 uiState.mobile = window.getComputedStyle(mobileNav).display === "block";
 const shiftBg = (viewInd) =>
   startBgShift(backgroundColors, mainContainer, uiState, viewInd);
-setInterval(() => scrollPoll(mobileNav, siteWrapper, shiftBg, uiState), 800);
+setInterval(() => scrollPoll(mobileNav, siteWrapper, shiftBg, uiState), 500);
 const triggerResize = () => resizeUpdate(contentViews, mobileNav, uiState);
 window.addEventListener("resize", triggerResize);
 setTimeout(() => {
