@@ -30,29 +30,28 @@ const FRAMES = {
     [1, 1],
     [1, 0],
   ],
-  right_down: [
+  right: [
+    [4, 2],
+    [4, 1],
+    [4, 0],
+    [3, 3],
+    [3, 2],
     [2, 0],
     [2, 1],
     [2, 2],
     [2, 3],
     [3, 0],
-  ],
-  right_up: [
-    [3, 2],
-    [3, 3],
-    [4, 0],
-    [4, 1],
-    [4, 2],
-  ],
+  ]
 };
 
 const FRAME_INTERVAL = 100;
 
-let animation = "awaken";
+let animation = "neutral";
 let blinked = true;
 let frameIndex = 0;
 let hasAwoken = false;
 let interval;
+let isLookingAtCursor = false;
 
 const changeAnimation = (nextAnimation) => {
   frameIndex = 0;
@@ -82,8 +81,69 @@ const checkToBlink = () => {
   }
 };
 
+const clamp = (min, max, val) => {
+  if (val < min) {
+    return min;
+  }
+  if (val > max) {
+    return max;
+  }
+  return val;
+};
+
+const drawFrame = (bitmap, canvas, context, frame) => {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  const offset = -240;
+  context.drawImage(bitmap, offset * frame[1], offset * frame[0]);
+};
+
+const mountMouseOverNav = (onMouseOver, bitmap, canvas, context) => {
+  const homeNav = document.getElementById("home-nav");
+  if (!homeNav) return;
+  homeNav.addEventListener("mouseenter", () => {
+    isLookingAtCursor = true;
+  });
+  homeNav.addEventListener("mouseleave", () => {
+    isLookingAtCursor = false;
+    changeAnimation("neutral");
+  });
+  homeNav.addEventListener("mousemove", e => onMouseOver(e, bitmap, canvas, context));
+};
+
+let mouseCooldown = false;
+
+const getPaddedMouseCoord = (screenCoord, originPoint, padding) => {
+  const diff = Math.abs(screenCoord - originPoint);
+  let paddedDiff = Math.round(diff / padding);
+  if (screenCoord < originPoint && paddedDiff !== 0) {
+    paddedDiff = -paddedDiff;
+  }
+  return paddedDiff;
+};
+
+const onMouseOverNav = (mouseOverEvent, bitmap, canvas, context) => {
+  if (mouseCooldown === true) return;
+  window.setTimeout(() => {
+    mouseCooldown = false;
+  }, 50);
+  mouseCooldown = true;
+
+  const isMobile = window.innerWidth < 700;
+  const origin = isMobile ? [120, 640] : [190, 640];
+  const paddedXDiff = clamp(0, 10, getPaddedMouseCoord(mouseOverEvent.clientX, origin[0], 120));
+  const paddedYDiff = clamp(-5, 4, getPaddedMouseCoord(mouseOverEvent.clientY, origin[1], 60));
+  const rightAnimationIndex = paddedYDiff + 5;
+  const indexPadding = Math.round(paddedXDiff / 12);
+  const frameIndex = paddedYDiff < 1
+    ? rightAnimationIndex + indexPadding 
+    : rightAnimationIndex - indexPadding;
+  const desiredFrame = FRAMES["right"][frameIndex] ?? FRAMES["right"][FRAMES["right"].length - 1];
+  drawFrame(bitmap, canvas, context, desiredFrame);
+};
+
 const startEyeAnimation = (bitmap, canvas, context) => {
   interval = window.setInterval(() => {
+    if (isLookingAtCursor === true) return;
     checkToAwaken();
     checkToBlink();
     const activeFrames = FRAMES[animation];
@@ -91,9 +151,7 @@ const startEyeAnimation = (bitmap, canvas, context) => {
       frameIndex = 0;
     }
     const frame = activeFrames[frameIndex];
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    const offset = -240;
-    context.drawImage(bitmap, offset * frame[1], offset * frame[0]);
+    drawFrame(bitmap, canvas, context, frame);
     frameIndex++;
   }, FRAME_INTERVAL);
 };
@@ -109,6 +167,7 @@ const makeEyeball = () => {
     .then((imgData) => {
       createImageBitmap(imgData).then((bitmap) => {
         startEyeAnimation(bitmap, canvas, context);
+        mountMouseOverNav(e => onMouseOverNav(e, bitmap, canvas, context));
       });
     });
 };
