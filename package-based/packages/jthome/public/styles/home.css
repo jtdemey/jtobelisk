@@ -603,7 +603,8 @@ strong {
   display: block;
   position: absolute;
   left: 0px;
-  bottom: 40px;
+  bottom: 0px;
+  padding: 80px 0px 40px;
   width: 240px;
   height: 240px;
   z-index: 0;
@@ -1201,8 +1202,7 @@ strong {
   }
 
   #eye {
-    left: 69px;
-    bottom: 169px;
+    padding: 169px 69px;
   }
 
   .doodle-card {

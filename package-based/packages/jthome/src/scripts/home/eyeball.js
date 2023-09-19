@@ -41,12 +41,12 @@ const FRAMES = {
     [2, 2],
     [2, 3],
     [3, 0],
-  ]
+  ],
 };
 
 const FRAME_INTERVAL = 100;
 
-let animation = "neutral";
+let animation = "awaken";
 let blinked = true;
 let frameIndex = 0;
 let hasAwoken = false;
@@ -101,13 +101,32 @@ const mountMouseOverNav = (onMouseOver, bitmap, canvas, context) => {
   const homeNav = document.getElementById("home-nav");
   if (!homeNav) return;
   homeNav.addEventListener("mouseenter", () => {
+    if (!hasAwoken) return;
     isLookingAtCursor = true;
   });
   homeNav.addEventListener("mouseleave", () => {
+    if (!hasAwoken) return;
     isLookingAtCursor = false;
     changeAnimation("neutral");
   });
-  homeNav.addEventListener("mousemove", e => onMouseOver(e, bitmap, canvas, context));
+  homeNav.addEventListener("mousemove", (e) =>
+    onMouseOver(e, bitmap, canvas, context)
+  );
+  const eye = document.getElementById("eye");
+  if (!eye) return;
+  eye.addEventListener("mouseenter", () => {
+    if (!hasAwoken) return;
+    isLookingAtCursor = false;
+    changeAnimation("neutral");
+  });
+  eye.addEventListener("mouseleave", () => {
+    if (!hasAwoken) return;
+    isLookingAtCursor = true;
+  });
+  eye.addEventListener("mousemove", e => {
+    if (!hasAwoken) return;
+    e.stopPropagation();
+  });
 };
 
 let mouseCooldown = false;
@@ -122,22 +141,35 @@ const getPaddedMouseCoord = (screenCoord, originPoint, padding) => {
 };
 
 const onMouseOverNav = (mouseOverEvent, bitmap, canvas, context) => {
-  if (mouseCooldown === true) return;
+  if (mouseCooldown === true || !hasAwoken) return;
   window.setTimeout(() => {
     mouseCooldown = false;
   }, 50);
   mouseCooldown = true;
+  if (!isLookingAtCursor) {
+    isLookingAtCursor = true;
+  }
 
   const isMobile = window.innerWidth < 700;
   const origin = isMobile ? [120, 640] : [190, 640];
-  const paddedXDiff = clamp(0, 10, getPaddedMouseCoord(mouseOverEvent.clientX, origin[0], 120));
-  const paddedYDiff = clamp(-5, 4, getPaddedMouseCoord(mouseOverEvent.clientY, origin[1], 60));
+  const paddedXDiff = clamp(
+    0,
+    15,
+    getPaddedMouseCoord(mouseOverEvent.clientX, origin[0], 120)
+  );
+  const paddedYDiff = clamp(
+    -5,
+    4,
+    getPaddedMouseCoord(mouseOverEvent.clientY, origin[1], 60)
+  );
   const rightAnimationIndex = paddedYDiff + 5;
-  const indexPadding = Math.round(paddedXDiff / 12);
-  const frameIndex = paddedYDiff < 1
-    ? rightAnimationIndex + indexPadding 
-    : rightAnimationIndex - indexPadding;
-  const desiredFrame = FRAMES["right"][frameIndex] ?? FRAMES["right"][FRAMES["right"].length - 1];
+  const indexPadding = Math.round(paddedXDiff / 7);
+  const frameIndex =
+    paddedYDiff < 1
+      ? rightAnimationIndex + indexPadding
+      : rightAnimationIndex - indexPadding;
+  const desiredFrame =
+    FRAMES["right"][frameIndex] ?? FRAMES["right"][FRAMES["right"].length - 1];
   drawFrame(bitmap, canvas, context, desiredFrame);
 };
 
@@ -166,8 +198,13 @@ const makeEyeball = () => {
     .then((res) => res.blob())
     .then((imgData) => {
       createImageBitmap(imgData).then((bitmap) => {
-        startEyeAnimation(bitmap, canvas, context);
-        mountMouseOverNav(e => onMouseOverNav(e, bitmap, canvas, context));
+        const clickMeElements = document.querySelectorAll(".click-me");
+        clickMeElements.forEach((clickMe) =>
+          clickMe.addEventListener("click", () =>
+            startEyeAnimation(bitmap, canvas, context)
+          )
+        );
+        mountMouseOverNav((e) => onMouseOverNav(e, bitmap, canvas, context));
       });
     });
 };
