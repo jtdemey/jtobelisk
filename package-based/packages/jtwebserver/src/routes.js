@@ -23,13 +23,14 @@ const routeHtml = (endpoint, fileName) =>
   });
 
 routeHtml("/", "home");
-routeHtml("/about", "about");
-routeHtml("/doodles", "doodles");
+routeHtml("/software", "software");
+routeHtml("/media", "media");
+routeHtml("/contact", "contact");
+
+/*
 routeHtml("/civildawn", "civildawn");
 routeHtml("/imposter", "imposter");
 routeHtml("/imposter/:gameCode", "imposter");
-
-/*
 routeHtml('/meyhemn', 'meyhemn');
 routeHtml('/rollfighter', 'rollfighter');
 routeHtml('/sandbox', 'sandbox');

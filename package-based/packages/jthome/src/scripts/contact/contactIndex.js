@@ -1,7 +1,6 @@
 import backgroundColors from "./backgroundColors";
 import uiState from "./uiState";
 import { startBgShift } from "../lib/backgroundShifter";
-import { loadDoodlePreviews } from "../doodles/loadDoodles";
 import { resizeUpdate } from "../lib/resize";
 import { scrollPoll } from "../lib/scroll";
 
@@ -21,4 +20,3 @@ setTimeout(() => {
   triggerResize();
 }, 500);
 mainContainer.style.transition = "background 1.2s";
-loadDoodlePreviews(uiState);

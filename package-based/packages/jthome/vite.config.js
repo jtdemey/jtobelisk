@@ -6,9 +6,10 @@ export default defineConfig({
 		outDir: "../dist",
 		rollupOptions: {
 			input: {
-				about: "src/about.html",
-				doodles: "src/doodles.html",
-				home: "src/home.html"
+				home: "src/home.html",
+				software: "src/software.html",
+				media: "src/media.html",
+				contact: "src/contact.html"
 			}
 		}
 	},

@@ -822,16 +822,16 @@ strong {
   background-color: #3c413c;
 }
 
-.bio-highlight {
+.media-highlight {
   background-color: #45050c;
 }
-.skills-highlight {
+.nsg-highlight {
   background-color: #011936;
 }
-.contact-highlight {
+.mm-highlight {
   background-color: #273f3a;
 }
-.doodles-highlight {
+.ttk-highlight {
   background-color: #175873;
 }
 
@@ -917,6 +917,10 @@ strong {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.m-b-1 {
+  margin-bottom: 1em;
 }
 
 .m-b-3 {
