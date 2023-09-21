@@ -82,12 +82,8 @@ const checkToBlink = () => {
 };
 
 const clamp = (min, max, val) => {
-  if (val < min) {
-    return min;
-  }
-  if (val > max) {
-    return max;
-  }
+  if (val < min) return min;
+  if (val > max) return max;
   return val;
 };
 
@@ -154,7 +150,7 @@ const onMouseOverNav = (mouseOverEvent, bitmap, canvas, context) => {
   const origin = isMobile ? [120, 640] : [190, 640];
   const paddedXDiff = clamp(
     0,
-    15,
+    12,
     getPaddedMouseCoord(mouseOverEvent.clientX, origin[0], 120)
   );
   const paddedYDiff = clamp(
@@ -163,7 +159,7 @@ const onMouseOverNav = (mouseOverEvent, bitmap, canvas, context) => {
     getPaddedMouseCoord(mouseOverEvent.clientY, origin[1], 60)
   );
   const rightAnimationIndex = paddedYDiff + 5;
-  const indexPadding = Math.round(paddedXDiff / 7);
+  const indexPadding = Math.round(paddedXDiff / 12);
   const frameIndex =
     paddedYDiff < 1
       ? rightAnimationIndex + indexPadding
