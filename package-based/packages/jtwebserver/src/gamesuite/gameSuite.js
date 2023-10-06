@@ -2,7 +2,7 @@ import logger from "../logger.js";
 import { nanoid } from "nanoid";
 import { CORE_SOCKET_COMMANDS } from "./socketCommands.js";
 import { handlePong, pingPlayers } from "./playerCleaner.js";
-import createImposterModule from "./gamemodules/imposterModule.js";
+// import createImposterModule from "./gamemodules/imposterModule.js";
 
 const MAX_PLAYERS = 64;
 
@@ -30,7 +30,7 @@ export const makeGameSuite = () => {
   gameSuite.gameList = [];
   gameSuite.playerList = [];
   gameSuite.gameModules = {
-    imposter: createImposterModule(gameSuite),
+    // imposter: createImposterModule(gameSuite),
   };
 
   //Private

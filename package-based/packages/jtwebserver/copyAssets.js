@@ -26,7 +26,7 @@ fs.stat(DESTINATION, (err, stats) => {
 		stderr.write(`${DESTINATION} is not a directory\n`);
 		process.exit(1);
 	}
-	fs.rmSync(DESTINATION, { force: true, recursive: true });
+	fs.removeSync(DESTINATION, { force: true, recursive: true });
 	stdout.write("Cleared destination directory\n");
 	copyFiles();
 });
