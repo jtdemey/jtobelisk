@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "collect": "node copyAssets.js",
+    "collect": "node src/copyAssets.js",
     "start": "node src/server.js -NODE_ENV=production"
   },
   "dependencies": {
