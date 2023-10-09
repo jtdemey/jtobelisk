@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jtwc
+    image: jtwi
+    networks:
+      - jtw-network
+    restart: unless-stopped
+
+  nginx_proxy:
+    depends_on:
+      - nodejs
+    container_name: webserver
+    image: nginx:mainline-alpine
+    ports:
+      - "80:80"
+    networks:
+      - jtw-network
+    restart: unless-stopped
+    volumes:
+      - web-root:/var/www/html
+      - ./nginx-conf:/etc/nginx/conf.d
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - webserver
+    command: certonly --webroot --webroot-path=/var/www/html --email john.torsten.mailbox@protonmail.com --agree-tos --no-eff-email --staging -d johntorsten.com  -d www.johntorsten.com 
+
+volumes:
+  certbot-etc:
+  certbot-var:
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/jd/node_project/views/
+      o: bind
+
+networks:
+  app-network:
+    driver: bridge

@@ -469,7 +469,7 @@ blockquote {
 }
 
 blockquote > p {
-  padding: 0px 25%;
+  padding: 0px;
   font-family: "Ubuntu", sans-serif;
   text-align: left;
 }
@@ -541,7 +541,7 @@ strong {
 }
 
 .software-container {
-  background: #4b4e6d;
+  background: #3f415a;
 }
 
 .media-container {
@@ -1119,8 +1119,8 @@ strong {
   cursor: grab;
 }
 
-/* DOODLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.doodle-cards {
+/* IMAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.image-cards {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -1128,14 +1128,14 @@ strong {
   background: rgba(0, 0, 0, 0);
 }
 
-.doodle-card {
+.image-card {
   height: 172px;
   flex: 0 1 96px;
   margin: 0 1rem 1rem;
   background: linear-gradient(#333, rgba(51, 51, 51, 0.7));
 }
 
-.doodle-card > a > img {
+.image-card > a > img {
   width: 100%;
   height: 100%;
 }
@@ -1164,7 +1164,7 @@ strong {
   height: 100%;
 }
 
-#load-doodles-btn {
+#load-images-btn {
   margin-bottom: 6rem;
 }
 
@@ -1198,6 +1198,10 @@ strong {
 }
 
 @media all and (min-width: 701px) {
+  blockquote > p {
+    padding: 0px 25%;
+  }
+
   .mnav-container {
     display: none;
   }

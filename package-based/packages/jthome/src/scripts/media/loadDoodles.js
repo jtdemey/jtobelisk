@@ -19,19 +19,19 @@ const loadDoodle = async (ind, isPreview) => {
   cards.appendChild(card);
 };
 
-export const loadDoodles = (amt, uiState) => {
+export const loadDoodles = async (amt, uiState) => {
   const s = uiState.doodlesLoaded;
   for (let i = s; i < s + amt; i++) {
     if (uiState.doodlesLoaded <= uiState.doodleTotal) {
       uiState.doodlesLoaded += 1;
-      loadDoodle(i, false);
+      await loadDoodle(i, false);
     } else {
       document.querySelector("#load-doodles-btn").style.display = "none";
     }
   }
 };
 
-export const loadDoodlePreviews = (uiState) => {
+export const loadDoodlePreviews = async (uiState) => {
   const randInts = [];
   while (randInts.length < 5) {
     const ind = Math.floor(Math.random() * uiState.doodleTotal);
@@ -40,6 +40,6 @@ export const loadDoodlePreviews = (uiState) => {
     }
   }
   for (let i = 0; i < randInts.length; i++) {
-    loadDoodle(i, true);
+    await loadDoodle(i, true);
   }
 };
