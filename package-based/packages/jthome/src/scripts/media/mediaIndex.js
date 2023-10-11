@@ -3,6 +3,10 @@ import uiState from "./uiState";
 import { startBgShift } from "../lib/backgroundShifter";
 import { resizeUpdate } from "../lib/resize";
 import { scrollPoll } from "../lib/scroll";
+import { loadImagePreviews } from "../lib/loadImages";
+
+const MEETING_MINUTES_IMAGE_COUNT = 20;
+const TOP_THINGS_IMAGE_COUNT = 43;
 
 const siteWrapper = document.querySelector(".site-wrapper");
 const mainContainer = document.querySelector(".main-container");
@@ -20,3 +24,6 @@ setTimeout(() => {
   triggerResize();
 }, 500);
 mainContainer.style.transition = "background 1.2s";
+
+const amountToLoad = uiState.mobile ? 2 : 4
+loadImagePreviews(amountToLoad, "mm-images", "meeting_minutes", MEETING_MINUTES_IMAGE_COUNT);

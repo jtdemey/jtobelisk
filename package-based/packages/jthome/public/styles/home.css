@@ -1120,46 +1120,38 @@ strong {
 }
 
 /* IMAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.image-cards {
+.image-previews {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  padding: 0 1rem 1rem;
+  padding: 0 1rem;
   background: rgba(0, 0, 0, 0);
 }
 
-.image-card {
+.image-preview {
   height: 172px;
   flex: 0 1 96px;
-  margin: 0 1rem 1rem;
+  margin: 0 1rem;
   background: linear-gradient(#333, rgba(51, 51, 51, 0.7));
 }
 
-.image-card > a > img {
+.image-preview > a > img {
   width: 100%;
   height: 100%;
 }
 
-/* DRAWINGS PAGE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.drawings-container {
+.image-cards {
   padding-bottom: 0.5rem;
-  background: #111;
-  text-align: center;
-  color: #fff;
-}
-
-.drawings {
-  margin-bottom: 1rem;
   text-align: center;
 }
 
-.drawing {
+.image-card {
   max-width: 40%;
   margin: auto;
   padding: 2rem 0;
 }
 
-.drawing > a > img {
+.image-card > a > img {
   width: 100%;
   height: 100%;
 }
