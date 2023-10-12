@@ -25,5 +25,16 @@ setTimeout(() => {
 }, 500);
 mainContainer.style.transition = "background 1.2s";
 
-const amountToLoad = uiState.mobile ? 2 : 4
-loadImagePreviews(amountToLoad, "mm-images", "meeting_minutes", MEETING_MINUTES_IMAGE_COUNT);
+const amountToLoad = uiState.mobile ? 2 : 4;
+loadImagePreviews(
+  amountToLoad,
+  "mm-images",
+  "meeting_minutes",
+  MEETING_MINUTES_IMAGE_COUNT
+);
+loadImagePreviews(
+  amountToLoad,
+  "things-to-know-images",
+  "things_to_know",
+  TOP_THINGS_IMAGE_COUNT
+);
