@@ -44,7 +44,7 @@ export const loadImagePreviews = async (
 ) => {
   const randInts = [];
   while (randInts.length < amountToLoad) {
-    const ind = Math.floor(Math.random() * maxImages);
+    const ind = Math.floor(Math.random() * maxImages) + 1;
     if (!randInts.some((int) => int === ind)) {
       randInts.push(ind);
     }

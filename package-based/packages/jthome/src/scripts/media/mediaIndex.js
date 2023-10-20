@@ -6,7 +6,7 @@ import { scrollPoll } from "../lib/scroll";
 import { loadImagePreviews } from "../lib/loadImages";
 
 const MEETING_MINUTES_IMAGE_COUNT = 20;
-const TOP_THINGS_IMAGE_COUNT = 43;
+const TOP_THINGS_IMAGE_COUNT = 15;
 
 const siteWrapper = document.querySelector(".site-wrapper");
 const mainContainer = document.querySelector(".main-container");
