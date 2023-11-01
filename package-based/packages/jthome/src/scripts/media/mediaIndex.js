@@ -1,5 +1,5 @@
 import backgroundColors from "./backgroundColors";
-import uiState from "./uiState";
+import uiState from "../lib/uiState";
 import { startBgShift } from "../lib/backgroundShifter";
 import { resizeUpdate } from "../lib/resize";
 import { scrollPoll } from "../lib/scroll";

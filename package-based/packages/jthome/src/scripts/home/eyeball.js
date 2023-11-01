@@ -50,8 +50,9 @@ let animation = "awaken";
 let blinked = true;
 let frameIndex = 0;
 let hasAwoken = false;
-let interval;
 let isLookingAtCursor = false;
+
+const isMobile = window.innerWidth < 700;
 
 const changeAnimation = (nextAnimation) => {
   frameIndex = 0;
@@ -136,17 +137,23 @@ const getPaddedMouseCoord = (screenCoord, originPoint, padding) => {
   return paddedDiff;
 };
 
+let mouseOverNavTimeout;
 const onMouseOverNav = (mouseOverEvent, bitmap, canvas, context) => {
   if (mouseCooldown === true || !hasAwoken) return;
   window.setTimeout(() => {
     mouseCooldown = false;
   }, 50);
   mouseCooldown = true;
+  if (mouseOverNavTimeout) {
+    clearTimeout(mouseOverNavTimeout);
+  }
+  mouseOverNavTimeout = window.setTimeout(() => {
+    isLookingAtCursor = false;
+  }, 2000);
   if (!isLookingAtCursor) {
     isLookingAtCursor = true;
   }
 
-  const isMobile = window.innerWidth < 700;
   const origin = isMobile ? [120, 640] : [190, 640];
   const paddedXDiff = clamp(
     0,
@@ -170,7 +177,7 @@ const onMouseOverNav = (mouseOverEvent, bitmap, canvas, context) => {
 };
 
 const startEyeAnimation = (bitmap, canvas, context) => {
-  interval = window.setInterval(() => {
+  window.setInterval(() => {
     if (isLookingAtCursor === true) return;
     checkToAwaken();
     checkToBlink();

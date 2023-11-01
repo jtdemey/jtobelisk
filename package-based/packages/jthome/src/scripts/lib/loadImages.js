@@ -25,10 +25,12 @@ export const loadImages = async (
   maxImages
 ) => {
   let newImagesLoaded = imagesLoaded;
-  for (let i = imagesLoaded; i < imagesLoaded + amountToLoad; i++) {
-    if (imagesLoaded <= maxImages) {
-      newImagesLoaded += 1;
+  for (let i = imagesLoaded + 1; i < imagesLoaded + amountToLoad + 1; i++) {
+    if (newImagesLoaded <= maxImages) {
+      console.log("Loading " + i);
+      console.log(imagesLoaded, maxImages);
       await loadImage(i, elementIdentifier, imgDirectory, false);
+      newImagesLoaded += 1;
     } else {
       document.querySelector("#load-images-btn").style.display = "none";
     }

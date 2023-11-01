@@ -526,6 +526,11 @@ strong {
   display: none;
 }
 
+.horizontal-center {
+  display: flex;
+  justify-content: center;
+}
+
 .site-wrapper {
   height: 100%;
   overflow-x: hidden;
@@ -1010,6 +1015,8 @@ strong {
 }
 
 /* CONTACT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+/*
 .contact-text {
   max-width: 40em;
   color: white;
@@ -1119,6 +1126,8 @@ strong {
   cursor: grab;
 }
 
+*/
+
 /* IMAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 .image-previews {
   display: flex;
@@ -1156,8 +1165,32 @@ strong {
   height: 100%;
 }
 
+#images-content {
+  color: hsl(133, 18%, 92%);
+  text-align: center;
+}
+
+#images-content > h2 {
+  margin-top: 1rem;
+  font-family: "Vollkorn", serif;
+}
+
+#images-container {
+  margin: 100px 0px 200px;
+}
+
+#load-images-btn-area {
+  display: flex;
+  justify-content: center;
+}
+
 #load-images-btn {
-  margin-bottom: 6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-bottom: 200px;
+  color: hsl(133, 18%, 89%);
 }
 
 /* MOBILE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

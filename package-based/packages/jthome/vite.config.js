@@ -6,10 +6,10 @@ export default defineConfig({
 		outDir: "../dist",
 		rollupOptions: {
 			input: {
-				home: "src/pages/home.html",
-				software: "src/pages/software.html",
-				media: "src/pages/media.html",
-				contact: "src/pages/contact.html"
+				home: "src/home.html",
+				software: "src/software.html",
+				media: "src/media.html",
+				contact: "src/contact.html"
 			}
 		}
 	},
