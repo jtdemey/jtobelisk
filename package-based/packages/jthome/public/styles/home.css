@@ -1155,19 +1155,25 @@ strong {
 }
 
 .image-card {
-  max-width: 40%;
+  max-width: 90%;
+  max-height: 800px;
   margin: auto;
   padding: 2rem 0;
 }
 
 .image-card > a > img {
-  width: 100%;
+  width: min(100%, 720px);
   height: 100%;
 }
 
 #images-content {
+  margin-top: 2rem;
   color: hsl(133, 18%, 92%);
   text-align: center;
+}
+
+#images-content > h1 {
+  margin: 0 1rem;
 }
 
 #images-content > h2 {
@@ -1253,8 +1259,7 @@ strong {
     padding: 169px 69px;
   }
 
-  .doodle-card {
-    height: 256px;
-    flex: 0 1 186px;
+  .image-card {
+    max-width: 80%;
   }
 }

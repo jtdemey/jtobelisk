@@ -3,6 +3,12 @@ const loadImage = async (ind, elementIdentifier, imgDirectory, isPreview) => {
   const dood = new Image();
   dood.src = `${uri}${isPreview ? "thumbs/" : ""}img${ind}.webp`;
 
+  const setImgDimensions = (e) => {
+    dood.width = e.target?.width;
+    dood.height = e.target?.height;
+  };
+  dood.addEventListener("load", setImgDimensions);
+
   const link = document.createElement("a");
   link.href = `${uri}img${ind}.webp`;
   link.setAttribute("target", "_blank");
@@ -22,14 +28,13 @@ export const loadImages = async (
   elementIdentifier,
   imagesLoaded,
   imgDirectory,
-  maxImages
+  maxImages,
+  altDescriptions,
 ) => {
   let newImagesLoaded = imagesLoaded;
   for (let i = imagesLoaded + 1; i < imagesLoaded + amountToLoad + 1; i++) {
     if (newImagesLoaded <= maxImages) {
-      console.log("Loading " + i);
-      console.log(imagesLoaded, maxImages);
-      await loadImage(i, elementIdentifier, imgDirectory, false);
+      await loadImage(i, elementIdentifier, imgDirectory, false, altDescriptions[i - 1]);
       newImagesLoaded += 1;
     } else {
       document.querySelector("#load-images-btn").style.display = "none";
@@ -42,7 +47,7 @@ export const loadImagePreviews = async (
   amountToLoad,
   elementIdentifier,
   imgDirectory,
-  maxImages
+  maxImages,
 ) => {
   const randInts = [];
   while (randInts.length < amountToLoad) {
