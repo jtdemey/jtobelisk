@@ -1,9 +1,10 @@
-const loadImage = async (ind, elementIdentifier, imgDirectory, isPreview) => {
+const loadImage = async (ind, elementIdentifier, imgDirectory, isPreview, altDescription) => {
   const uri = `${window.location.origin}/img/${imgDirectory}/`;
   const dood = new Image();
   dood.src = `${uri}${isPreview ? "thumbs/" : ""}img${ind}.webp`;
 
   const setImgDimensions = (e) => {
+    dood.alt = altDescription;
     dood.width = e.target?.width;
     dood.height = e.target?.height;
   };
