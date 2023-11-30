@@ -38,7 +38,10 @@ export const loadImages = async (
       await loadImage(i, elementIdentifier, imgDirectory, false, altDescriptions[i - 1]);
       newImagesLoaded += 1;
     } else {
-      document.querySelector("#load-images-btn").style.display = "none";
+      const siteWrapper = document.querySelector(".site-wrapper");
+      const loadImagesButton = document.querySelector("#load-images-btn > div > h5");
+      loadImagesButton.innerHTML = "Scroll to top";
+      loadImagesButton.addEventListener("click", () => siteWrapper.scrollTo({ behavior: "smooth", top: 0 }));
     }
   }
   return newImagesLoaded;

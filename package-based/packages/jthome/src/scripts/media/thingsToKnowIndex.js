@@ -22,6 +22,17 @@ const ALT_DESCRIPTIONS = [
 
 let imagesLoaded = 0;
 
+const init = async () => {
+  imagesLoaded = await loadImages(
+    8,
+    "images",
+    imagesLoaded,
+    "things_to_know",
+    MAX_IMAGES,
+    ALT_DESCRIPTIONS,
+  );
+};
+
 const mountBtnListener = () => {
   const loadImageBtn = document.getElementById("load-images-btn");
   if (!loadImageBtn) return;
@@ -36,13 +47,6 @@ const mountBtnListener = () => {
     );
   });
 };
-
-imagesLoaded = await loadImages(
-  8,
-  "images",
-  imagesLoaded,
-  "things_to_know",
-  MAX_IMAGES,
-  ALT_DESCRIPTIONS,
-);
+ 
+init();
 mountBtnListener();
