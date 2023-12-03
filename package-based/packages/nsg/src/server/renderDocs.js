@@ -116,6 +116,7 @@ const renderMarkdownFile = (mdFilePath, styleFileName) => {
 const renderDirectory = (dirPath, styleFileName) => {
   const dir = fs.readdirSync(dirPath);
   dir.forEach(fileName => {
+    if (!fileName.endsWith(".md")) return;
     const file = path.join(dirPath, fileName);
     const stats = fs.statSync(file);
     if (stats.isDirectory()) {
@@ -129,6 +130,7 @@ const renderDirectory = (dirPath, styleFileName) => {
 
 clearAndCreateDist();
 const styleFileName = await renderCss();
+copyFonts();
 const docDirectory = path.join(process.cwd(), "docs");
 process.stdout.write(`ة_ة Preparing to render docs in ${docDirectory}\n...\n`);
 renderDirectory(docDirectory, styleFileName);
