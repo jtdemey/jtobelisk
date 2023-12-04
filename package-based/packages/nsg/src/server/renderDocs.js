@@ -76,6 +76,10 @@ const copyFonts = () => {
   });
 };
 
+let previousHref = undefined;
+let nextHref = undefined;
+
+
 // Markdown to HTML
 const renderMarkdownFile = (mdFilePath, styleFileName) => {
   const endpoint = mdFilePath
@@ -90,6 +94,8 @@ const renderMarkdownFile = (mdFilePath, styleFileName) => {
   const doc = {
     body: html,
     endpoint,
+    previousHref: "test",
+    nextHref: "test2",
     styleFileName,
     tags: TAGS[endpoint] || "",
     title: getTitle(endpoint)
@@ -113,10 +119,9 @@ const renderMarkdownFile = (mdFilePath, styleFileName) => {
   );
 };
 
-const renderDirectory = (dirPath, styleFileName) => {
+const actOnDirectory = (dirPath, styleFileName, action) => {
   const dir = fs.readdirSync(dirPath);
   dir.forEach(fileName => {
-    if (!fileName.endsWith(".md")) return;
     const file = path.join(dirPath, fileName);
     const stats = fs.statSync(file);
     if (stats.isDirectory()) {
@@ -124,9 +129,13 @@ const renderDirectory = (dirPath, styleFileName) => {
       renderDirectory(file, styleFileName);
       return;
     }
-    renderMarkdownFile(file, styleFileName);
+    if (!fileName.endsWith(".md")) return;
+    action(file, styleFileName);
   });
 };
+
+const renderDirectory = (dirPath, styleFileName) =>
+  actOnDirectory(dirPath, styleFileName, (file, styleFileName) => renderMarkdownFile(file, styleFileName))
 
 clearAndCreateDist();
 const styleFileName = await renderCss();

@@ -9,21 +9,36 @@
     <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
   </head>
   <body>
-    <nav>
-      <ul>
-        <li>HOME</li>
-        <li>TABLE OF CONTENTS</li>
-      </ul>
-    </nav>
     <main id="wrapper">
+
+      <nav>
+        <ul>
+          <li>HOME</li>
+          <li>TABLE OF CONTENTS</li>
+        </ul>
+      </nav>
 
       <%- title %>
 
       <article id="content">
-
         <%- body %>
-
       </article>
+
+      <nav id="nav-arrows">
+        <ul>
+          <a href="<%- previousHref %>">
+            <li>
+              &larr; Previous
+            </li>
+          </a>
+          <a href="<%- nextHref %>">
+            <li>
+              Next &rarr; 
+            </li>
+          </a>
+        </ul>
+      </nav>
+
     </main>
     <script src="/scripts/index.js" type="module"></script>
   </body>
