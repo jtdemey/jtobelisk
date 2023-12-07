@@ -1,5 +1,7 @@
 1. [Home](/home)
+2. [Table of Contents](/table-of-contents) (here)
 2. [Preface](/preface)
+    1. [Introduction](/preface/introduction)
     1. [Audience](/preface/audience)
     2. [Purposes](/preface/purposes)
     3. [Disclaimers](/preface/disclaimers)

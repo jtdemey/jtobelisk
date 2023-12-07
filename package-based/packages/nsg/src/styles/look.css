@@ -137,6 +137,8 @@ html,
 body {
   width: 100%;
   min-height: 100%;
+  background: hsl(287, 75%, 5%);
+  overflow: auto;
 }
 
 a {
@@ -161,6 +163,7 @@ pre {
 h1 {
   font-family: sans-serif;
   font-size: 3.2rem;
+  padding-top: 26px;
 }
 
 h6 {
@@ -187,8 +190,11 @@ ul {
 
 nav > ul {
   display: flex;
-  justify-content: space-between;
   list-style-type: none;
+}
+
+nav > ul > a > li {
+  padding-right: 2rem;
 }
 
 strong {
@@ -196,13 +202,9 @@ strong {
 }
 
 #wrapper {
-  position: fixed;
-  top: 0px;
-  left: 0px;
   width: calc(100% - 1.8rem);
   min-height: 100%;
   padding: 0.3rem 0.9rem;
-  background: hsl(287, 75%, 5%);
   color: hsl(120, 57%, 92%);
   overflow-x: hidden;
   overflow-y: auto;

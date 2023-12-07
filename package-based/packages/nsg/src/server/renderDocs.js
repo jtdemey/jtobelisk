@@ -45,6 +45,20 @@ const clearAndCreateDist = () => {
   process.stdout.write(`[o_o] Created empty dist directory\n`);
 };
 
+const tableOfContents = [];
+const collectTableOfContents = () => {
+  const fileContent = fs.readFileSync(
+    path.join(process.cwd(), "docs/table-of-contents.md"),
+    "utf8"
+  );
+  fileContent.split("\n").forEach(line => {
+    const title = line.substring(line.indexOf("[") + 1, line.indexOf("]"));
+    if (!title) return;
+    const link = line.substring(line.indexOf("(") + 1, line.indexOf(")"));
+    tableOfContents.push({ href: link, name: title });
+  });
+};
+
 // Styles
 const renderCss = async () => {
   const srcContent = fs.readFileSync(
@@ -76,10 +90,6 @@ const copyFonts = () => {
   });
 };
 
-let previousHref = undefined;
-let nextHref = undefined;
-
-
 // Markdown to HTML
 const renderMarkdownFile = (mdFilePath, styleFileName) => {
   const endpoint = mdFilePath
@@ -90,15 +100,25 @@ const renderMarkdownFile = (mdFilePath, styleFileName) => {
     headerIds: false,
     mangle: false
   });
+  const title = getTitle(endpoint);
+  const currentTocIndex = tableOfContents.map(entry => entry.href).indexOf(endpoint);
+  if (currentTocIndex === -1) {
+    process.stderr.write(`Could not find table of contents entry for ${endpoint}\n`);
+    return;
+  }
+  const previousPage = tableOfContents[currentTocIndex - 1] || { href: "/home", name: "Home" };
+  const nextPage = tableOfContents[currentTocIndex + 1] || { href: "/home", name: "Home" };
 
   const doc = {
     body: html,
     endpoint,
-    previousHref: "test",
-    nextHref: "test2",
+    previousHref: previousPage.href,
+    previousName: previousPage.name || "",
+    nextHref: nextPage.href || "",
+    nextName: nextPage.name || "",
     styleFileName,
     tags: TAGS[endpoint] || "",
-    title: getTitle(endpoint)
+    title
   };
 
   ejs.renderFile(
@@ -119,7 +139,7 @@ const renderMarkdownFile = (mdFilePath, styleFileName) => {
   );
 };
 
-const actOnDirectory = (dirPath, styleFileName, action) => {
+const renderDirectory = (dirPath, styleFileName) => {
   const dir = fs.readdirSync(dirPath);
   dir.forEach(fileName => {
     const file = path.join(dirPath, fileName);
@@ -130,13 +150,11 @@ const actOnDirectory = (dirPath, styleFileName, action) => {
       return;
     }
     if (!fileName.endsWith(".md")) return;
-    action(file, styleFileName);
+    renderMarkdownFile(file, styleFileName);
   });
 };
 
-const renderDirectory = (dirPath, styleFileName) =>
-  actOnDirectory(dirPath, styleFileName, (file, styleFileName) => renderMarkdownFile(file, styleFileName))
-
+collectTableOfContents();
 clearAndCreateDist();
 const styleFileName = await renderCss();
 copyFonts();
