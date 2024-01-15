@@ -17,15 +17,17 @@ const sendHtmlFile = (res, fileName) => {
   res.sendFile(path.join(process.cwd(), "src", "pages", fileName));
 };
 
-const routeHtml = (endpoint, fileName) =>
+const routeHtml = (endpoint, fileName = undefined) =>
   router.route(endpoint).get((_, res) => {
-    sendHtmlFile(res, `${fileName}.html`);
+    sendHtmlFile(res, `${fileName ? fileName : endpoint.replace("/", "")}.html`);
   });
 
 routeHtml("/", "home");
-routeHtml("/software", "software");
-routeHtml("/media", "media");
-routeHtml("/contact", "contact");
+routeHtml("/software");
+routeHtml("/media");
+routeHtml("/contact");
+routeHtml("/meeting-minutes");
+routeHtml("/things-to-know");
 
 /*
 routeHtml("/civildawn", "civildawn");
