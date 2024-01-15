@@ -23,6 +23,7 @@ const routeHtml = (endpoint, fileName = undefined) =>
   });
 
 routeHtml("/", "home");
+routeHtml("/home");
 routeHtml("/software");
 routeHtml("/media");
 routeHtml("/contact");
