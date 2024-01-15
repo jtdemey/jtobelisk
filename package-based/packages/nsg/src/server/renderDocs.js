@@ -10,12 +10,12 @@ import postcss from "postcss";
 // Optional overrides where key = endpoint
 const TAGS = {
   "/home": "main",
-  "/toc": "main,navigation"
+  "/table-of-contents": "main,navigation"
 };
 
 const TITLES = {
   "/home": "The Neodigital Survival Guide",
-  "/toc": "Table of Contents"
+  "/table-of-contents": "Table of Contents"
 };
 
 // Utilities

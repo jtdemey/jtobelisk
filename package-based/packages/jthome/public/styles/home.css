@@ -469,6 +469,8 @@ blockquote {
 }
 
 blockquote > p {
+  display: flex;
+  justify-content: center;
   padding: 0px;
   font-family: "Ubuntu", sans-serif;
   text-align: left;

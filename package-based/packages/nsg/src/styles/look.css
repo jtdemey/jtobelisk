@@ -220,6 +220,10 @@ strong {
   padding-left: 26px;
 }
 
+#content > ul {
+  padding-left: 26px;
+}
+
 @media all and (min-width: 768px) {
   h1 {
     font-size: 5.3rem;

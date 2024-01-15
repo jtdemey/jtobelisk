@@ -1,9 +1,12 @@
 import cors from "cors";
+import dotenv from "dotenv";
 import express from "express";
 import logger from "./logger.js";
 import morgan from "morgan";
 import router from "./routes.js";
 import { createWebSocketServer } from "./socketServer.js";
+
+dotenv.config();
 
 const dev = process.env.NODE_ENV !== "production";
 const port = process.env.SERVER_PORT || 3000;

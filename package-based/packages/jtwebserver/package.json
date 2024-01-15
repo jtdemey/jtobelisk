@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "collect": "node src/copyAssets.js",
-    "start": "node src/server.js -NODE_ENV=production"
+    "start": "node src/server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
