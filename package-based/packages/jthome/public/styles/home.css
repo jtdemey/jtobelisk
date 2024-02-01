@@ -555,6 +555,10 @@ strong {
   background: #45050c;
 }
 
+.poems-container {
+  background: hsl(75, 100%, 10%);
+}
+
 .default-cursor {
   cursor: default;
 }
