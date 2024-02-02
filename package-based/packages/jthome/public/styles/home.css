@@ -485,7 +485,7 @@ code {
   max-width: 600px;
 }
 
-h1 {
+h1, h2 {
   font-family: "Ubuntu", sans-serif;
 }
 
@@ -914,8 +914,13 @@ strong {
   margin-left: 86px;
 }
 
-.project-content {
+.content {
   margin: 15vh 2rem 0;
+  padding: 2rem 0;
+}
+
+.inner-content {
+  margin: 0 2rem 0;
   padding: 2rem 0;
 }
 
@@ -926,6 +931,11 @@ strong {
 .content-header {
   padding-top: 3rem;
   font-size: 4rem;
+}
+
+.content-subheader {
+  padding-top: 3rem;
+  font-size: 2rem;
 }
 
 .content-header-sm {
@@ -1204,6 +1214,13 @@ strong {
   color: hsl(133, 18%, 89%);
 }
 
+/* UTILITY ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.center-text {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
 /* MOBILE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 @media all and (max-width: 700px) {
   .jd-title {
@@ -1227,7 +1244,7 @@ strong {
     width: 100vw;
   }
 
-  .doodle-card {
+  .image-card {
     height: 212px;
     flex: 0 1 164px;
   }
