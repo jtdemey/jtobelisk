@@ -967,10 +967,12 @@ strong {
   width: 140px;
   height: 2em;
   margin: 32px 0 0 16px;
-  text-align: center;
   background: rgba(87, 103, 100, 0.75);
   box-shadow: 8px 8px #1a1a1a;
+  color: white;
   cursor: grab;
+  text-align: center;
+  text-decoration: none;
 }
 
 .content-btns {
@@ -1206,7 +1208,6 @@ strong {
 }
 
 #images-content {
-  margin-top: 2rem;
   color: hsl(133, 18%, 92%);
   text-align: center;
 }
@@ -1311,6 +1312,10 @@ strong {
 
   .image-card {
     max-width: 80%;
+  }
+
+  .table-of-contents {
+    padding: 0 30%;
   }
 
   .text-content {
