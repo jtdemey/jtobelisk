@@ -556,7 +556,7 @@ strong {
 }
 
 .poems-container {
-  background: hsl(75, 100%, 10%);
+  background: hsl(75, 50%, 10%);
 }
 
 .default-cursor {
@@ -851,8 +851,8 @@ strong {
 .media-highlight {
   background-color: #45050c;
 }
-.nsg-highlight {
-  background-color: #120316;
+.poems-highlight {
+  background-color: #20260d;
 }
 .mm-highlight {
   background-color: #273f3a;
@@ -963,6 +963,16 @@ strong {
   margin-bottom: 3em;
 }
 
+.back-btn {
+  width: 140px;
+  height: 2em;
+  margin: 32px 0 0 16px;
+  text-align: center;
+  background: rgba(87, 103, 100, 0.75);
+  box-shadow: 8px 8px #1a1a1a;
+  cursor: grab;
+}
+
 .content-btns {
   margin-bottom: 3rem;
 }
@@ -1015,6 +1025,20 @@ strong {
 .arrow-outline-up {
   width: 3em;
   fill: #fff;
+}
+
+.table-of-contents {
+  margin-left: 28px;
+  font-family: "Vollkorn", serif;
+  line-height: 1.75rem;
+  list-style-type: decimal-leading-zero;
+  text-decoration: underline;
+}
+
+.text-content {
+  padding: 1rem 0;
+  font-size: 1.1rem;
+  line-height: 1.5rem;
 }
 
 #skills-list {
@@ -1221,6 +1245,10 @@ strong {
   text-align: center;
 }
 
+.whitespace {
+  padding: 64px 0;
+}
+
 /* MOBILE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 @media all and (max-width: 700px) {
   .jd-title {
@@ -1283,5 +1311,9 @@ strong {
 
   .image-card {
     max-width: 80%;
+  }
+
+  .text-content {
+    padding: 1rem 30%;
   }
 }
