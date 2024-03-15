@@ -934,7 +934,7 @@ strong {
 }
 
 .content-subheader {
-  padding-top: 3rem;
+  padding: 3rem 0;
   font-size: 2rem;
 }
 
