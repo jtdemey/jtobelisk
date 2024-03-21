@@ -162,12 +162,41 @@ main {
   padding: 36px;
 }
 
+a {
+  color: hsl(58, 79%, 80%);
+}
+
 header {
-  padding: 12px 0px 64px;
+  padding: 12px 0px 24px;
 }
 
 h1, h2 {
+  color: hsl(58, 79%, 80%);
   font-family: "YesevaOne";
   font-size: 3rem;
   line-height: 4rem;
+}
+
+article {
+  margin: 24px 0px;
+}
+
+ul {
+  padding-left: 24px;
+  list-style-type: square;
+}
+
+input {
+  border: none;
+  outline: none;
+}
+
+#email {
+  height: 24px;
+  padding: 8px;
+  background: hsl(37, 17%, 57%);
+}
+
+#submit {
+  background: hsl(58, 79%, 80%);
 }
