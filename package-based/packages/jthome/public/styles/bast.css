@@ -151,11 +151,11 @@ $dark-moss-green: #5d5a0b;
   overflow-x: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;
-  background: hsl(41, 42%, 8%);
+  background: hsl(41, 12%, 8%);
 }
 
 main {
-  color: hsl(59, 100%, 91%);
+  color: hsl(59, 100%, 96%);
   font-family: "JosefinSans";
   font-size: 1.3rem;
   line-height: 1.6rem;
@@ -163,17 +163,18 @@ main {
 }
 
 a {
-  color: hsl(58, 79%, 80%);
+  color: hsl(58, 79%, 85%);
 }
 
 header {
   padding: 12px 0px 24px;
+  text-align: center;
 }
 
 h1, h2 {
-  color: hsl(58, 79%, 80%);
+  color: hsl(58, 79%, 85%);
   font-family: "YesevaOne";
-  font-size: 3rem;
+  font-size: 2.5rem;
   line-height: 4rem;
 }
 
@@ -193,10 +194,21 @@ input {
 
 #email {
   height: 24px;
+  margin: 12px 0px;
   padding: 8px;
   background: hsl(37, 17%, 57%);
 }
 
 #submit {
+  height: 40px;
+  padding: 8px;
   background: hsl(58, 79%, 80%);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+@media all and (min-width: 701px) {
+  header {
+    text-align: left;
+  }
 }

@@ -12,7 +12,8 @@ export default defineConfig({
 				poems: "src/poems.html",
 				contact: "src/contact.html",
 				meetingMinutes: "src/meeting-minutes.html",
-				thingsToKnow: "src/things-to-know.html"
+				thingsToKnow: "src/things-to-know.html",
+				bast: "src/bast.html"
 			}
 		}
 	},

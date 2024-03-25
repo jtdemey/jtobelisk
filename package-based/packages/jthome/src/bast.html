@@ -26,15 +26,21 @@
         </article>
         <article>
           <p>
+            <noscript>
+              Please note: JavaScript is required to process the form submission.
+              Our scripts are <a href="https://github.com/jtdemey/jtobelisk/tree/main/package-based/packages/jthome/src/scripts">open source</a> and non-invasive.
+            </noscript>
             We welcome anyone who is interested in improving the town of Bel Air, MD.<br>
             Enter your email below to receive sporadic updates.<br>
             We will not share your email with anyone, and you can unsubscribe at any time through a link provided in each email.
           </p>
-          <form action="/bast/subscribe">
+          <form method="post">
             <input
               id="email"
+              name="email"
               placeholder="Your email address"
               type="text"
+              value=""
             />
             <input id="submit" type="submit" value="Join BAST" />
           </form>

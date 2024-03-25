@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "collect": "node src/copyAssets.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "test-email-list": "node src/test/testEmailList.js"
   },
   "dependencies": {
     "better-sqlite3": "^9.4.3",
