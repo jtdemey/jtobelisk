@@ -1,3 +1,4 @@
+import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
@@ -18,6 +19,7 @@ process.on("SIGINT", () => process.exit());
     createEmailList("bast", router, "/bast/subscribe", "/bast/unsubscribe");
 
     const expressApp = express();
+    expressApp.use(bodyParser.json());
     if (dev) {
       expressApp.use(cors());
     }

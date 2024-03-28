@@ -3,6 +3,8 @@ import { nanoid } from "nanoid";
 
 const makeResponse = (response, isError) => ({ isError, response });
 
+export let db;
+
 export const createEmailList = (
   dbName,
   router,
@@ -10,7 +12,7 @@ export const createEmailList = (
   unsubscribeEndpoint,
   verifyEndpoint,
 ) => {
-  const db = new Database(`${dbName}.db`);
+  db = new Database(`${dbName}.db`);
 
   db.exec(`CREATE TABLE IF NOT EXISTS unverified_list (
     email TEXT NOT NULL,
@@ -32,16 +34,19 @@ export const createEmailList = (
 
     const emailRegex = /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/gm;
     if (!emailRegex.test(incomingEmail)) {
+      console.log("regex");
       res.status(400).json(makeResponse("INVALID_EMAIL", true));
       return;
     }
+    console.log("regex pass");
 
     const getMatchingRecords = db.prepare(
       "SELECT email FROM unverified_list WHERE email = ?",
     );
-    const matchingEmail = getMatchingRecords.run(incomingEmail);
-    console.log(matchingEmail);
+    const matchingEmail = getMatchingRecords.get(incomingEmail);
     if (matchingEmail) {
+      console.log("match");
+      console.log(matchingEmail);
       res.status(400).json(makeResponse("REDUNDANT_EMAIL", true));
       return;
     }
@@ -50,6 +55,7 @@ export const createEmailList = (
       "INSERT INTO verified_list (email, verification_code) VALUES (?, ?, ?)",
     );
     insertRecord.run(incomingEmail, nanoid(48));
+    console.log("ins");
     res.status(200).json(makeResponse("SUBSCRIBE", false));
   });
 
