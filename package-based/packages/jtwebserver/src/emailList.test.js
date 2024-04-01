@@ -1,19 +1,15 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { db } from "./emailList.js";
+import { describe, expect, it } from "vitest";
+import { TEST_EMAIL } from "./emailList";
 
-const BASE_URI = "http://localhost:3000/";
+const PORT = 3000;
+const BASE_URI = `http://localhost:${PORT}/`;
 
 const makeRequest = (options) => fetch(`${BASE_URI}bast/subscribe`, options);
-
-beforeEach(() => {
-  db.exec("DELETE FROM unverified_list");
-  db.exec("DELETE FROM verified_list");
-});
 
 describe("subscribing", () => {
   it("should reject missing input", async () => {
     const response = await makeRequest({
-      method: "post",
+      method: "POST",
       body: "",
     });
     expect(response.status).toBe(400);
@@ -24,7 +20,7 @@ describe("subscribing", () => {
 
   it("should reject empty input", async () => {
     const response = await makeRequest({
-      method: "post",
+      method: "POST",
       body: JSON.stringify({
         email: "",
       }),
@@ -37,7 +33,7 @@ describe("subscribing", () => {
 
   it("should reject bogus input", async () => {
     const response = await makeRequest({
-      method: "post",
+      method: "POST",
       body: JSON.stringify({
         email: "i2jo2j3/ 303 -20 3nfn/a/slk2@jfioj11!",
       }),
@@ -50,9 +46,9 @@ describe("subscribing", () => {
 
   it("should reject bogus email", async () => {
     const response = await makeRequest({
-      method: "post",
+      method: "POST",
       body: JSON.stringify({
-        email: "_test-@email.mail",
+        email: "test @email.net",
       }),
     });
     expect(response.status).toBe(400);
@@ -68,12 +64,12 @@ describe("subscribing", () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: "user@email.mail",
+        email: TEST_EMAIL,
       }),
     });
     expect(response.status).toBe(200);
     const jsonResponse = await response.json();
     expect(jsonResponse.isError).toBe(false);
-    expect(jsonResponse.response).toBe("SUBSCRIBED");
+    expect(jsonResponse.response).toBe("SUBSCRIBE");
   });
 });

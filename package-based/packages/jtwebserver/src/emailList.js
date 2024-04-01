@@ -1,9 +1,27 @@
 import Database from "better-sqlite3";
 import { nanoid } from "nanoid";
 
+const MAX_LENGTH = 254;
+export const TEST_EMAIL = "grimace@mcdonaldswifi.net"
+
 const makeResponse = (response, isError) => ({ isError, response });
 
-export let db;
+const createSchema = database => {
+  database.exec(`CREATE TABLE IF NOT EXISTS unverified_list (
+    email TEXT NOT NULL,
+    added_at DATE DEFAULT (datetime('now')),
+    verification_code TEXT NOT NULL
+  )`);
+  database.exec(`CREATE TABLE IF NOT EXISTS verified_list (
+    email TEXT NOT NULL,
+    unsubscribe_code NOT NULL,
+    verified_at DATE DEFAULT (datetime('now'))
+  )`);
+  database.prepare("DELETE FROM unverified_list WHERE email = ?").run(TEST_EMAIL);
+  database.prepare("DELETE FROM verified_list WHERE email = ?").run(TEST_EMAIL);
+};
+
+const validateMaxLength = str => str.length > MAX_LENGTH;
 
 export const createEmailList = (
   dbName,
@@ -12,21 +30,12 @@ export const createEmailList = (
   unsubscribeEndpoint,
   verifyEndpoint,
 ) => {
-  db = new Database(`${dbName}.db`);
+  const db = new Database(`${dbName}.db`);
+  createSchema(db);
 
-  db.exec(`CREATE TABLE IF NOT EXISTS unverified_list (
-    email TEXT NOT NULL,
-    added_at DATE DEFAULT (datetime('now')),
-    verification_code TEXT NOT NULL
-  )`);
-  db.exec(`CREATE TABLE IF NOT EXISTS verified_list (
-    email TEXT NOT NULL,
-    unsubscribe_code NOT NULL,
-    verified_at DATE DEFAULT (datetime('now'))
-  )`);
-
+  // SUBSCRIBE
   router.route(subscribeEndpoint).post((req, res) => {
-    if (!req.body?.email) {
+    if (!req.body?.email || validateMaxLength(req.body.email)) {
       res.status(400).json(makeResponse("INVALID_EMAIL", true));
       return;
     }
@@ -34,32 +43,39 @@ export const createEmailList = (
 
     const emailRegex = /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/gm;
     if (!emailRegex.test(incomingEmail)) {
-      console.log("regex");
       res.status(400).json(makeResponse("INVALID_EMAIL", true));
       return;
     }
-    console.log("regex pass");
 
     const getMatchingRecords = db.prepare(
       "SELECT email FROM unverified_list WHERE email = ?",
     );
     const matchingEmail = getMatchingRecords.get(incomingEmail);
     if (matchingEmail) {
-      console.log("match");
-      console.log(matchingEmail);
       res.status(400).json(makeResponse("REDUNDANT_EMAIL", true));
       return;
     }
 
     const insertRecord = db.prepare(
-      "INSERT INTO verified_list (email, verification_code) VALUES (?, ?, ?)",
+      "INSERT INTO unverified_list (email, verification_code) VALUES (?, ?)",
     );
     insertRecord.run(incomingEmail, nanoid(48));
-    console.log("ins");
     res.status(200).json(makeResponse("SUBSCRIBE", false));
   });
 
-/*
+  // UNSUBSCRIBE 
+  router.route(unsubscribeEndpoint).get((req, res) => {
+    if (!req.query?.unsubscribe_code) {
+      res.status(400).json(makeResponse("INVALID_UNSUBSCRIBE", true));
+    }
+
+    res.status(200).json({
+      isError: false,
+      response: "UNSUBSCRIBE",
+    });
+  });
+
+  // VERIFY 
   router.route(verifyEndpoint).get((req, res) => {
     if (!req.query?.email || !req.query?.verification_code) {
       res.status(400).json(makeResponse("INVALID_VERIFICATION", true));
@@ -76,16 +92,6 @@ export const createEmailList = (
 
     res.status(200).json(makeResponse("VERIFY", false));
   });
-*/
 
-  router.route(unsubscribeEndpoint).get((req, res) => {
-    if (!req.query?.unsubscribe_code) {
-      res.status(400).json(makeResponse("INVALID_UNSUBSCRIBE", true));
-    }
-
-    res.status(200).json({
-      isError: false,
-      response: "UNSUBSCRIBE",
-    });
-  });
+  return db;
 };

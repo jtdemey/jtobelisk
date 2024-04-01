@@ -13,7 +13,8 @@ export default defineConfig({
 				contact: "src/contact.html",
 				meetingMinutes: "src/meeting-minutes.html",
 				thingsToKnow: "src/things-to-know.html",
-				bast: "src/bast.html"
+				bast: "src/bast.html",
+				bastWelcome: "src/bast_welcome.html"
 			}
 		}
 	},

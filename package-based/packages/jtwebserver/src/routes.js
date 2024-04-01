@@ -19,22 +19,16 @@ const ROUTES = [
   "/poems",
   "/things-to-know",
   "/bast",
-  ["/bel-air-strong-towns", "bast"]
+  ["/bel-air-strong-towns", "bast"],
+  ["/belairstrongtowns", "bast"],
+  ["/bast/welcome", "bast_welcome"],
   /*
   "/civildawn",
-  "civildawn",
   "/imposter",
-  "imposter",
   "/imposter/:gameCode",
-  "imposter",
   "/meyhemn",
-  "meyhemn",
   "/rollfighter",
-  "rollfighter",
   "/sandbox",
-  "sandbox",
-  "/devtut",
-  "devtut",
   */
 ];
 

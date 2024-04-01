@@ -16,7 +16,7 @@ process.on("SIGINT", () => process.exit());
 
 (() => {
   try {
-    createEmailList("bast", router, "/bast/subscribe", "/bast/unsubscribe");
+    createEmailList("bast", router, "/bast/subscribe", "/bast/unsubscribe", "/bast/verify");
 
     const expressApp = express();
     expressApp.use(bodyParser.json());

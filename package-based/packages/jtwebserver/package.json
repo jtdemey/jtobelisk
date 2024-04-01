@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "collect": "node src/copyAssets.js",
+    "list-unverified": "node src/listUnverified.js",
+    "list-verified": "node src/listVerified.js",
     "start": "node src/server.js",
     "test": "vitest run"
   },
