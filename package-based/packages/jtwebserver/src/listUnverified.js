@@ -16,6 +16,7 @@ export const printResults = (results) => {
     Object.keys(record).forEach((property) => {
       process.stdout.write(`${property}: ${record[property]}\n`);
     });
+    process.stdout.write("\n");
   });
 };
 
