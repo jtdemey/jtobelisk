@@ -23,7 +23,6 @@ const createSchema = (database) => {
     .prepare("DELETE FROM unverified_list WHERE email = ?")
     .run(TEST_EMAIL);
   database.prepare("DELETE FROM verified_list WHERE email = ?").run(TEST_EMAIL);
-  database.prepare("DELETE FROM unverified_list").run();
 };
 
 const validateMaxLength = (str) => str.length > MAX_LENGTH;
