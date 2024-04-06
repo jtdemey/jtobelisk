@@ -1,3 +1,5 @@
+const URI = "https://johntorsten.com";
+
 function showError(text) {
   const errorArea = document.getElementById("error");
   if (!errorArea) return;
@@ -9,7 +11,7 @@ function subscribe(e) {
   e.preventDefault();
   const email = document.getElementById("email");
   if (!email || !email.value) return;
-  fetch("http://johntorsten.com/bast/subscribe", {
+  fetch(`${URI}/bast/subscribe`, {
     method: "post",
     headers: {
       "Content-Type": "application/json",
@@ -35,8 +37,7 @@ function subscribe(e) {
           return;
         }
 
-        window.location.href = "http://johntorsten.com/bast/welcome";
-        // window.location.href = "https://johntorsten.com/bast/welcome";
+        window.location.href = `${URI}/bast/welcome`;
       });
     })
     .catch((err) => console.error(err));
