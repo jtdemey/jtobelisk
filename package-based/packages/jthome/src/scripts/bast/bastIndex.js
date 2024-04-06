@@ -9,7 +9,7 @@ function subscribe(e) {
   e.preventDefault();
   const email = document.getElementById("email");
   if (!email || !email.value) return;
-  fetch("http://localhost:3000/bast/subscribe", {
+  fetch("http://johntorsten.com/bast/subscribe", {
     method: "post",
     headers: {
       "Content-Type": "application/json",
@@ -35,7 +35,7 @@ function subscribe(e) {
           return;
         }
 
-        window.location.href = "http://localhost:3000/bast/welcome";
+        window.location.href = "http://johntorsten.com/bast/welcome";
         // window.location.href = "https://johntorsten.com/bast/welcome";
       });
     })
