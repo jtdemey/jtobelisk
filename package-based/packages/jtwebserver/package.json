@@ -4,9 +4,9 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "collect": "node src/copyAssets.js",
-    "list-unverified": "node src/listUnverified.js",
-    "list-verified": "node src/listVerified.js",
+    "collect": "node src/scripts/copyAssets.js",
+    "list-unverified": "node src/scripts/listUnverified.js",
+    "list-verified": "node src/scripts/listVerified.js",
     "start": "node src/server.js",
     "test": "vitest run"
   },
