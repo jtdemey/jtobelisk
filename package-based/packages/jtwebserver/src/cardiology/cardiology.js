@@ -3,9 +3,10 @@ import { nanoid } from "nanoid";
 const COMMANDS = {
   ACCEPT_CONNECTION: "accept_connection",
   CONNECT: "connect",
+  SERVER_ERROR: "server_error",
 };
 
-export const GAME_TITLE = "cardiology";
+const MODULE_NAME = "cardiology";
 
 const logError = (error) =>
   process.stderr.write(`[CARDIOLOGY] ERROR: ${error}\n`);
@@ -14,7 +15,7 @@ const logInfo = (info) => process.stdout.write(`[CARDIOLOGY] INFO: ${info}\n`);
 const makeCommand = (commandName, params) => {
   const baseCommand = {
     command: commandName,
-    gameTitle: GAME_TITLE,
+    module: MODULE_NAME,
   };
   if (params) {
     return JSON.stringify({
@@ -27,7 +28,7 @@ const makeCommand = (commandName, params) => {
 
 const makeGame = (games) => {
   let gameId = nanoid(8);
-  while (games.some((existingGame) => existingGame.gameId === gameId)) {
+  while (games.some((existingGame) => existingGame?.gameId === gameId)) {
     gameId = nanoid(8);
   }
   return {
@@ -39,11 +40,11 @@ const makeGame = (games) => {
 const makePlayer = (socket, players) => {
   let playerId = nanoid(12);
   while (
-    players.some((existingPlayer) => existingPlayer.playerId === playerId)
+    players.some((existingPlayer) => existingPlayer?.playerId === playerId)
   ) {
     playerId = nanoid(12);
   }
-  socket.send(makeCommand(ACCEPT_CONNECTION, { playerId }));
+  socket.send(makeCommand(COMMANDS.ACCEPT_CONNECTION, { playerId }));
   players.push({
     playerId,
     socket,
@@ -53,7 +54,13 @@ const makePlayer = (socket, players) => {
 const cardiology = {
   games: [],
   players: [],
-  addPlayer: (ws) => players.push(makePlayer(ws, cardiology.players)),
+  addPlayer: (ws) =>
+    cardiology.players.push(makePlayer(ws, cardiology.players)),
+  removePlayer: (playerId) => {
+    cardiology.players = cardiology.players.filter(
+      (player) => player && player.playerId !== playerId,
+    );
+  },
   handleSocketMessage: (ws, raw) => {
     let msg;
     try {
@@ -62,7 +69,8 @@ const cardiology = {
       logError(`Unable to parse client message ${msg}`);
     }
 
-    if (!msg.gameTitle === GAME_TITLE) {
+    console.log(msg);
+    if (!msg.module || msg.module !== MODULE_NAME) {
       logError(`No valid game title in command ${msg.command}`);
       return;
     }
@@ -76,14 +84,21 @@ const cardiology = {
     }
 
     //Core message handler
-    switch (msg.command) {
-      case COMMANDS.CONNECT:
-        console.log(msg);
-        addPlayer(ws, msg);
-        break;
-      default:
-        logError(`Socket command "${msg.command}" not recognized`);
-        break;
+    try {
+      switch (msg.command) {
+        case COMMANDS.CONNECT:
+          console.log(msg);
+          cardiology.addPlayer(ws, msg);
+          break;
+        default:
+          logError(`Socket command "${msg.command}" not recognized`);
+          break;
+      }
+    } catch(e) {
+      logError(`Failed to handle command ${msg.command} from player ${msg.playerId}`);
+      ws.send(makeCommand(COMMANDS.SERVER_ERROR));
     }
   },
 };
+
+export default cardiology;

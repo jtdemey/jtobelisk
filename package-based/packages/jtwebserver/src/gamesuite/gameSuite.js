@@ -5,6 +5,7 @@ import { handlePong, pingPlayers } from "./playerCleaner.js";
 // import createImposterModule from "./gamemodules/imposterModule.js";
 
 const MAX_PLAYERS = 64;
+const MODULE_NAME = "gamesuite";
 
 export const makeGameSuite = () => {
   const gameSuite = {};
@@ -51,15 +52,17 @@ export const makeGameSuite = () => {
 
   //Creators
   gameSuite.makeCommand = (commName, params = null) => {
+    const command = {
+      command: commName,
+      module: MODULE_NAME,
+    };
     if (params) {
       return JSON.stringify({
-        command: commName,
+        ...command,
         ...params,
       });
     }
-    return JSON.stringify({
-      command: commName,
-    });
+    return JSON.stringify(command);
   };
 
   const genGameId = () => {
@@ -74,9 +77,7 @@ export const makeGameSuite = () => {
   };
 
   gameSuite.makeGame = (moduleName) => {
-    console.log("getting game module " + moduleName);
     const currentModule = gameSuite.getGameModule(moduleName);
-    console.log(currentModule);
     return {
       gameId: genGameId(),
       gameTitle: moduleName,
@@ -448,6 +449,9 @@ export const makeGameSuite = () => {
   //Message handler
   gameSuite.handleSocketMsg = (wss, ws, raw) => {
     const msg = wss.gs.parseRes(raw);
+    if (!msg.module || msg.module !== MODULE_NAME) {
+      return;
+    }
     if (msg.command !== "ping" && msg.command !== "pong") {
       gameSuite.logInfo(
         `${msg.socketId ? `Socket ${msg.socketId}` : `New player`} says ${

@@ -11,7 +11,6 @@ import {
 export let socket = null;
 
 const initImposter = (dispatch) => {
-  console.log(import.meta.env.VITE_WEBSOCKET_URI);
   const socketUrl =
     import.meta.env.WEBSOCKET_URI || "ws://localhost:3000/";
   socket = new WebSocket(socketUrl);
