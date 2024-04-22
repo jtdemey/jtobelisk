@@ -9,6 +9,7 @@ export const createWebSocketServer = (server) => {
   });
   wss.gs = makeGameSuite();
   wss.gs.startIdleClock();
+  cardiology.startIdleClock();
   wss.on("connection", (ws) => {
     ws.on("message", (e) => {
       cardiology.handleSocketMessage(ws, e);

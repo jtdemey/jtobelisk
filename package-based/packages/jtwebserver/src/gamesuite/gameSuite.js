@@ -108,7 +108,7 @@ export const makeGameSuite = () => {
     callerId,
     callerName,
     threshold,
-    voteData = {}
+    voteData = {},
   ) => ({
     voteId: nanoid(),
     voteType: type,
@@ -125,12 +125,14 @@ export const makeGameSuite = () => {
   //Utilities
   gameSuite.emitToGame = (gameId, command, debug = false) => {
     const gamePlayers = gameSuite.playerList.filter(
-      (p) => p.gameId && p.gameId === gameId
+      (p) => p.gameId && p.gameId === gameId,
     );
     for (let j = 0; j < gamePlayers.length; j++) {
       if (debug) {
         gameSuite.logInfo(
-          `Sending ${JSON.parse(command).command} to ${gamePlayers[j].socketId}`
+          `Sending ${JSON.parse(command).command} to ${
+            gamePlayers[j].socketId
+          }`,
         );
       }
       gamePlayers[j].socket.send(command);
@@ -139,14 +141,14 @@ export const makeGameSuite = () => {
 
   gameSuite.emitToPlayer = (socketId, command, debug = false) => {
     const player = gameSuite.playerList.filter(
-      (p) => p.socketId === socketId
+      (p) => p.socketId === socketId,
     )[0];
     if (!player) {
       gameSuite.logError(`Could not emit to player ${socketId}`);
     }
     if (debug) {
       gameSuite.logInfo(
-        `Sending ${JSON.parse(command).command} to ${socketId}`
+        `Sending ${JSON.parse(command).command} to ${socketId}`,
       );
     }
     player.socket.send(command);
@@ -177,7 +179,7 @@ export const makeGameSuite = () => {
       gameSuite.logError(`Could not get game module ${moduleName}`);
       return {
         controller: () => {},
-        domain: {}
+        domain: {},
       };
     }
     return m;
@@ -226,7 +228,7 @@ export const makeGameSuite = () => {
     gameSuite.gameList = gameSuite.gameList.concat([game]);
     if (debug) {
       gameSuite.logInfo(
-        `Added game ${game.gameId} (Total: ${gameSuite.gameList.length})`
+        `Added game ${game.gameId} (Total: ${gameSuite.gameList.length})`,
       );
     }
   };
@@ -234,14 +236,14 @@ export const makeGameSuite = () => {
   gameSuite.addPlayer = (player, debug = false) => {
     if (gameSuite.playerList.length >= MAX_PLAYERS) {
       gameSuite.logError(
-        `Could not add player ${player.socketId}: max players exceeded`
+        `Could not add player ${player.socketId}: max players exceeded`,
       );
       return;
     }
     gameSuite.playerList = gameSuite.playerList.concat([player]);
     if (debug) {
       gameSuite.logInfo(
-        `Added player ${player.socketId} (Total: ${gameSuite.playerList.length})`
+        `Added player ${player.socketId} (Total: ${gameSuite.playerList.length})`,
       );
     }
   };
@@ -252,37 +254,39 @@ export const makeGameSuite = () => {
     gameSuite.gameList = r;
     if (debug) {
       gameSuite.logInfo(
-        `Removed game ${gameId} (Total: ${gameSuite.gameList.length})`
+        `Removed game ${gameId} (Total: ${gameSuite.gameList.length})`,
       );
     }
   };
 
   gameSuite.removePlayer = (socketId, debug = false) => {
     const activeGame = gameSuite.gameList.filter((g) =>
-      g.players.some((p) => p.socketId === socketId)
+      g.players.some((p) => p.socketId === socketId),
     )[0];
     if (activeGame && activeGame.players) {
       if (activeGame.players.length <= 1) {
         gameSuite.removeGame(activeGame.gameId);
         gameSuite.logInfo(
-          `Removed empty game ${activeGame.gameId} (Total: ${gameSuite.gameList.length})`
+          `Removed empty game ${activeGame.gameId} (Total: ${gameSuite.gameList.length})`,
         );
       } else {
         gameSuite.updateGame(activeGame.gameId, {
           players: activeGame.players.filter((p) => p.socketId !== socketId),
         });
       }
-      const currentModule = gameSuite.getGameModule(activeGame.gameTitle || "[no module specified]");
+      const currentModule = gameSuite.getGameModule(
+        activeGame.gameTitle || "[no module specified]",
+      );
       if (currentModule.domain.removePlayer) {
         currentModule.domain.removePlayer(socketId, activeGame);
       }
     }
     gameSuite.playerList = gameSuite.playerList.filter(
-      (p) => p.socketId !== socketId
+      (p) => p.socketId !== socketId,
     );
     if (debug) {
       gameSuite.logInfo(
-        `Removed player ${socketId} (Total: ${gameSuite.playerList.length})`
+        `Removed player ${socketId} (Total: ${gameSuite.playerList.length})`,
       );
     }
   };
@@ -342,7 +346,7 @@ export const makeGameSuite = () => {
         gameSuite.startIdleClock(gameSuite);
       }
       const activeGames = gameSuite.gameList.filter(
-        (g) => g.isPaused === false && g.players.length > 0
+        (g) => g.isPaused === false && g.players.length > 0,
       );
       for (let i = 0; i < activeGames.length; i++) {
         let g = activeGames[i];
@@ -352,7 +356,7 @@ export const makeGameSuite = () => {
           g.gameId,
           gameSuite.makeCommand(CORE_SOCKET_COMMANDS.GAME_TICK, {
             gameState: stripServerGameProperties(g),
-          })
+          }),
         );
       }
       gsTick = onTick(gsTick);
@@ -426,7 +430,10 @@ export const makeGameSuite = () => {
     }
     const targetGame = gameSuite.getGame(msg.gameId.toUpperCase());
     let rawName = truncateName(msg.playerName) || "Dingus";
-    const playerName = getOriginalName(rawName.trim(), targetGame?.players || []);
+    const playerName = getOriginalName(
+      rawName.trim(),
+      targetGame?.players || [],
+    );
     const joiner = gameSuite.updatePlayer(msg.socketId, {
       gameId: msg.gameId.toUpperCase(),
       name: playerName,
@@ -456,7 +463,7 @@ export const makeGameSuite = () => {
       gameSuite.logInfo(
         `${msg.socketId ? `Socket ${msg.socketId}` : `New player`} says ${
           msg.command
-        }`
+        }`,
       );
     }
     let recognizedByModule = ["core", ...Object.keys(gameSuite.gameModules)];
@@ -469,7 +476,7 @@ export const makeGameSuite = () => {
           player.socketId,
           wss.gs.makeCommand(CORE_SOCKET_COMMANDS.ACCEPT_GAME_LAUNCH, {
             socketId: player.socketId,
-          })
+          }),
         );
         break;
       case CORE_SOCKET_COMMANDS.PONG:
@@ -504,7 +511,7 @@ export const makeGameSuite = () => {
         if (!currentModule.domain[prop]) {
           checksOut = false;
           gameSuite.logError(
-            `Expected property ${prop} in game module ${moduleName}'s domain`
+            `Expected property ${prop} in game module ${moduleName}'s domain`,
           );
         }
       });
