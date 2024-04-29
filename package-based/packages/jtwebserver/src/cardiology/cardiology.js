@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid";
+import { customAlphabet, nanoid } from "nanoid";
 import { COMMANDS, makeCommand } from "./commands.js";
 import { makePlayer } from "./player.js";
 
@@ -11,10 +11,12 @@ const logError = (error) =>
   process.stderr.write(`[CARDIOLOGY] ERROR: ${error}\n`);
 const logInfo = (info) => process.stdout.write(`[CARDIOLOGY] INFO: ${info}\n`);
 
+const makeGameCode = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+
 const makeGame = (hostPlayerId, games) => {
-  let gameId = nanoid(8);
+  let gameId = makeGameCode(4);
   while (games.some((existingGame) => existingGame?.gameId === gameId)) {
-    gameId = nanoid(8);
+    gameId = makeGameCode(4);
   }
   return {
     gameId,
@@ -33,7 +35,9 @@ const cardiology = {
       logError("Maximum games exceeded");
       return;
     }
-    cardiology.games.push(makeGame(hostPlayerId, cardiology.games));
+    const newGame = makeGame(hostPlayerId, cardiology.games);
+    cardiology.games.push(newGame);
+    return newGame;
   },
 
   addPlayer: (ws) => {
@@ -41,11 +45,22 @@ const cardiology = {
       logError("Maximum players exceeded");
       return;
     }
-    cardiology.players.push(makePlayer(ws, cardiology.players));
+    const newPlayer = makePlayer(ws, cardiology.players);
+    const newGame = cardiology.addGame(newPlayer.playerId);
+    cardiology.players.push(newPlayer);
+    ws.send(
+      makeCommand(COMMANDS.ACCEPT_CONNECTION, {
+        gameId: newGame.gameId,
+        playerId: newPlayer.playerId,
+        playerName: newPlayer.playerName,
+      }),
+    );
   },
 
   getPlayer: (playerId) => {
-    const possiblePlayer = cardiology.players.find(playerId);
+    const possiblePlayer = cardiology.players.find(
+      (player) => player.playerId === playerId,
+    );
     if (!possiblePlayer) {
       logError(`No player ${playerId} found`);
       return undefined;
@@ -67,7 +82,6 @@ const cardiology = {
   resetPlayerPings: (playerId) => {
     const player = cardiology.getPlayer(playerId);
     if (!player) return;
-    console.log(`resetting ${playerId}`);
     player.pings = 0;
   },
 
@@ -91,7 +105,7 @@ const cardiology = {
         cardiology.removePlayer(playerId);
         logInfo(`Removed unresponsive player ${playerId}`);
       });
-    }, 3000);
+    }, 5000);
   },
 
   handleSocketMessage: (ws, raw) => {
