@@ -1,3 +1,3 @@
-import makeEyeball from "./eyeball";
+// import makeEyeball from "./eyeball";
 
-makeEyeball();
+// makeEyeball();

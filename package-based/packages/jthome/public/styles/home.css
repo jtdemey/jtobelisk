@@ -568,7 +568,11 @@ strong {
   grid-template-rows: 1fr 3fr;
   width: 100%;
   height: 100%;
-  background: hsl(359, 20%, 9%);
+  background-image: url("/img/homebackground.jpg");
+  background-color: hsl(359, 20%, 9%);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 170%;
   color: hsl(208, 10%, 90%);
 }
 
@@ -1060,6 +1064,31 @@ strong {
 }
 
 /* CONTACT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+#contact-methods {
+  max-width: 480px;
+  margin: 150px auto;
+  font-family: "Ubuntu", sans-serif;
+}
+
+#contact-methods li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0px;
+  line-height: 26px;
+}
+
+#contact-methods span {
+  padding-left: 16px;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
+#contact-methods svg {
+  filter: invert(99%) sepia(0%) saturate(0%) hue-rotate(147deg) brightness(90%) contrast(89%);
+  width: 24px;
+  height: 24px;
+}
 
 /*
 .contact-text {
@@ -1300,13 +1329,17 @@ strong {
     grid-template-columns: 86px 1fr;
   }
 
+  #home-main {
+    background-size: cover;
+  }
+
   #home-title-area {
-    padding: 64px 128px;
+    padding: 64px clamp(120px, 20%, 360px);
     text-align: left;
   }
 
   #home-nav {
-    padding: 0px 128px 64px;
+    padding: 0px clamp(100px, 20%, 360px) 64px;
   }
 
   #eye {
@@ -1323,5 +1356,9 @@ strong {
 
   .text-content {
     padding: 1rem 0px;
+  }
+
+  #contact-methods li {
+    justify-content: left;
   }
 }
