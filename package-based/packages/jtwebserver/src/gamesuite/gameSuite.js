@@ -372,7 +372,8 @@ export const makeGameSuite = () => {
         gameSuite.startGameClock(gameSuite);
       }
       gsTick = onTick(gsTick);
-    }, 3000);
+    }, 5000);
+    gameSuite.logInfo("Started idle poll");
   };
 
   //Event handlers
@@ -454,8 +455,8 @@ export const makeGameSuite = () => {
   };
 
   //Message handler
-  gameSuite.handleSocketMsg = (wss, ws, raw) => {
-    const msg = wss.gs.parseRes(raw);
+  gameSuite.handleSocketMessage = (wss, ws, raw) => {
+    const msg = gameSuite.parseRes(raw);
     if (!msg.module || msg.module !== MODULE_NAME) {
       return;
     }
@@ -474,7 +475,7 @@ export const makeGameSuite = () => {
         gameSuite.addPlayer(player, true);
         gameSuite.emitToPlayer(
           player.socketId,
-          wss.gs.makeCommand(CORE_SOCKET_COMMANDS.ACCEPT_GAME_LAUNCH, {
+          gameSuite.makeCommand(CORE_SOCKET_COMMANDS.ACCEPT_GAME_LAUNCH, {
             socketId: player.socketId,
           }),
         );
@@ -483,7 +484,7 @@ export const makeGameSuite = () => {
         handlePong(msg.socketId);
         break;
       case CORE_SOCKET_COMMANDS.SOCKET_DISONNECT:
-        wss.gs.removePlayer(msg.socketId, true);
+        gameSuite.removePlayer(msg.socketId, true);
         break;
       default:
         recognizedByModule = recognizedByModule.filter((x) => x !== "core");
@@ -521,6 +522,8 @@ export const makeGameSuite = () => {
     });
   };
   verifyModules();
+
+  gameSuite.startIdleClock();
 
   return gameSuite;
 };

@@ -1,19 +1,15 @@
-import cardiology from "./cardiology/cardiology.js";
-import { makeGameSuite } from "./gamesuite/gameSuite.js";
 import { WebSocketServer } from "ws";
+import siteModules from "./modules.js";
 
-export const createWebSocketServer = (server) => {
+export const createWebSocketServer = (server, enabledSiteModules) => {
   const wss = new WebSocketServer({
     perMessageDeflate: false,
     server: server,
   });
-  wss.gs = makeGameSuite();
-  wss.gs.startIdleClock();
-  cardiology.startIdleClock();
+  siteModules.onSocketServerInit(enabledSiteModules, wss);
   wss.on("connection", (ws) => {
     ws.on("message", (e) => {
-      cardiology.handleSocketMessage(ws, e);
-      wss.gs.handleSocketMsg(wss, ws, e);
+      siteModules.onSocketMessage(enabledSiteModules, wss, ws, e);
     });
   });
   return wss;
