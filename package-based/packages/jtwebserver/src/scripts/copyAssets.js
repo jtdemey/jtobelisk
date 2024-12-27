@@ -1,32 +1,36 @@
+import dotenv from "dotenv";
 import fs from "fs-extra";
 import { stderr, stdout } from "process";
+
+dotenv.config();
 
 const DESTINATION = "./dist/";
 
 const INCLUDED_PACKAGES = [
-	"../jthome/dist/",
-	"../imposter/dist/",
+    "../jthome/dist/",
+    "../imposter/dist/",
+    `${process.env.SITE_MODULE_REPOSITORY_DIRECTORY}adventurebook/build/`,
 ];
 
 const copyFiles = () => {
-	for (const packageOrigin of INCLUDED_PACKAGES) {
-		stdout.write(`Copying contents of ${packageOrigin}...\n`);
-		fs.copySync(packageOrigin, DESTINATION, { overwrite: false });
-	}
-	stdout.write("Copying complete!\n");
+    for (const packageOrigin of INCLUDED_PACKAGES) {
+        stdout.write(`Copying contents of ${packageOrigin}...\n`);
+        fs.copySync(packageOrigin, DESTINATION, { overwrite: false });
+    }
+    stdout.write("Copying complete!\n");
 };
 
 fs.stat(DESTINATION, (err, stats) => {
-	if (err) {
-		stderr.write(err + "\n");
-		stderr.write(`${DESTINATION} directory not found, creating...\n`);
-		fs.mkdirSync(DESTINATION);
-	}
-	if (!stats.isDirectory()) {
-		stderr.write(`${DESTINATION} is not a directory\n`);
-		process.exit(1);
-	}
-	fs.removeSync(DESTINATION, { force: true, recursive: true });
-	stdout.write("Cleared destination directory\n");
-	copyFiles();
+    if (err) {
+        stderr.write(err + "\n");
+        stderr.write(`${DESTINATION} directory not found, creating...\n`);
+        fs.mkdirSync(DESTINATION);
+    }
+    if (!stats.isDirectory()) {
+        stderr.write(`${DESTINATION} is not a directory\n`);
+        process.exit(1);
+    }
+    fs.removeSync(DESTINATION, { force: true, recursive: true });
+    stdout.write("Cleared destination directory\n");
+    copyFiles();
 });
