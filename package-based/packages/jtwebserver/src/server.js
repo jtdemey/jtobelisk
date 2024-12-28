@@ -29,14 +29,14 @@ try {
         logger.info(
             `Ready on localhost:${port} - env ${
                 dev ? "development" : "production"
-            }`
+            }`,
         );
     });
 
     const wsServer = createWebSocketServer(expressApp, enabledSiteModules);
     httpServer.on("upgrade", (req, socket, head) => {
         wsServer.handleUpgrade(req, socket, head, (ws) =>
-            wsServer.emit("connection", ws, req)
+            wsServer.emit("connection", ws, req),
         );
     });
 } catch (e) {

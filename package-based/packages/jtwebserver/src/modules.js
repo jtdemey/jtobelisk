@@ -36,7 +36,13 @@ const SITE_MODULE_DEFINITIONS = [
             router
                 .route("/adventure_book/the_devils_fingers/*/")
                 .get((req, res, next) =>
-                    importedModule.default(req, res, next, "/adventure_book/the_devils_fingers/", "adventure_book/")
+                    importedModule.default(
+                        req,
+                        res,
+                        next,
+                        "/adventure_book/the_devils_fingers/",
+                        "adventure_book/",
+                    ),
                 );
         },
     },
@@ -50,12 +56,12 @@ const SITE_MODULE_DEFINITIONS = [
             importedModule,
             socketServer,
             webSocket,
-            socketEvent
+            socketEvent,
         ) =>
             importedModule.handleSocketMessage(
                 socketServer,
                 webSocket,
-                socketEvent
+                socketEvent,
             ),
     },
 ];
@@ -75,7 +81,7 @@ const enableModule = async (moduleDefinition) =>
         import(moduleDefinition.modulePath)
             .then((importedModule) => {
                 process.stdout.write(
-                    `\tEnabled module '${moduleDefinition.moduleName}'\n`
+                    `\tEnabled module '${moduleDefinition.moduleName}'\n`,
                 );
                 resolve({
                     name: moduleDefinition.moduleName,
@@ -84,14 +90,14 @@ const enableModule = async (moduleDefinition) =>
                               moduleDefinition.onHttpServerInit(
                                   importedModule,
                                   expressApp,
-                                  router
+                                  router,
                               )
                         : null,
                     onSocketServerInit: moduleDefinition.onSocketServerInit
                         ? (socketServer) =>
                               moduleDefinition.onSocketServerInit(
                                   importedModule,
-                                  socketServer
+                                  socketServer,
                               )
                         : null,
                     onSocketMessage: moduleDefinition.onSocketMessage
@@ -100,14 +106,14 @@ const enableModule = async (moduleDefinition) =>
                                   importedModule,
                                   socketServer,
                                   webSocket,
-                                  socketEvent
+                                  socketEvent,
                               )
                         : null,
                 });
             })
             .catch((error) => {
                 process.stderr.write(
-                    `Unable to resolve module imported from ${moduleDefinition.modulePath}`
+                    `Unable to resolve module imported from ${moduleDefinition.modulePath}`,
                 );
                 process.stderr.write(`${error}\n`);
                 reject(error);
@@ -117,7 +123,7 @@ const enableModule = async (moduleDefinition) =>
 const siteModules = {
     enableSiteModules: async (logger) => {
         const enabledModuleDefs = SITE_MODULE_DEFINITIONS.filter(
-            (moduleDef) => moduleDef.enabled
+            (moduleDef) => moduleDef.enabled,
         );
         if (enabledModuleDefs.length < 1) {
             logger.info("No site modules enabled");
@@ -129,31 +135,31 @@ const siteModules = {
                     return enableModule(moduleDef);
                 } catch (e) {
                     logger.error(
-                        `Failed to load module ${moduleDef.moduleName} imported from ${moduleDef.modulePath}`
+                        `Failed to load module ${moduleDef.moduleName} imported from ${moduleDef.modulePath}`,
                     );
                     logger.error(e);
                 }
-            })
+            }),
         );
         logger.info(
             `Site modules enabled: ${enabledSiteModules
                 .map((siteModule) => siteModule?.name ?? null)
                 .filter((siteModule) => siteModule !== null)
-                .join(", ")}`
+                .join(", ")}`,
         );
         return enabledSiteModules;
     },
     onHttpServerInit: (modules, expressApp, router) =>
         modules.forEach((siteModule) =>
-            siteModule.onHttpServerInit?.(expressApp, router)
+            siteModule.onHttpServerInit?.(expressApp, router),
         ),
     onSocketServerInit: (modules, socketServer) =>
         modules.forEach((siteModule) =>
-            siteModule.onSocketServerInit?.(socketServer)
+            siteModule.onSocketServerInit?.(socketServer),
         ),
     onSocketMessage: (modules, socketServer, webSocket, socketEvent) =>
         modules.forEach((siteModule) =>
-            siteModule.onSocketMessage?.(socketServer, webSocket, socketEvent)
+            siteModule.onSocketMessage?.(socketServer, webSocket, socketEvent),
         ),
 };
 
