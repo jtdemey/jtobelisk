@@ -12,32 +12,34 @@ const port = process.env.SERVER_PORT || 3000;
 process.on("SIGINT", () => process.exit());
 
 try {
-  const expressApp = express();
-  expressApp.use(bodyParser.json());
-  if (dev) {
-    expressApp.use(cors());
-  }
-  expressApp.use(morgan("short"));
-  expressApp.use("/", router);
-  expressApp.use(express.static("dist"));
+    const expressApp = express();
+    expressApp.use(bodyParser.json());
+    if (dev) {
+        expressApp.use(cors());
+    }
+    expressApp.use(morgan("short"));
+    expressApp.use("/", router);
+    expressApp.use(express.static("dist"));
 
-  const httpServer = expressApp.listen(port, (err) => {
-    if (err) throw err;
-    logger.info(
-      `Ready on localhost:${port} - env ${dev ? "development" : "production"}`
-    );
-  });
+    const enabledSiteModules = await siteModules.enableSiteModules(logger);
+    siteModules.onHttpServerInit(enabledSiteModules, expressApp, router);
 
-  const enabledSiteModules = await siteModules.enableSiteModules(logger);
-  siteModules.onHttpServerInit(enabledSiteModules, expressApp, router);
+    const httpServer = expressApp.listen(port, (err) => {
+        if (err) throw err;
+        logger.info(
+            `Ready on localhost:${port} - env ${
+                dev ? "development" : "production"
+            }`
+        );
+    });
 
-  const wsServer = createWebSocketServer(expressApp, enabledSiteModules);
-  httpServer.on("upgrade", (req, socket, head) => {
-    wsServer.handleUpgrade(req, socket, head, (ws) =>
-      wsServer.emit("connection", ws, req)
-    );
-  });
+    const wsServer = createWebSocketServer(expressApp, enabledSiteModules);
+    httpServer.on("upgrade", (req, socket, head) => {
+        wsServer.handleUpgrade(req, socket, head, (ws) =>
+            wsServer.emit("connection", ws, req)
+        );
+    });
 } catch (e) {
-  logger.error(e);
-  process.exit(1);
+    logger.error(e);
+    process.exit(1);
 }

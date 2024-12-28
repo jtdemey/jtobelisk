@@ -34,9 +34,9 @@ const SITE_MODULE_DEFINITIONS = [
         modulePath: `${SITE_MODULE_REPOSITORY_DIRECTORY}adventurebook/src/middleware.js`,
         onHttpServerInit: (importedModule, expressApp, router) => {
             router
-                .route("/adventure_book/the_devils_fingers/*")
+                .route("/adventure_book/the_devils_fingers/*/")
                 .get((req, res, next) =>
-                    importedModule.default(req, res, next)
+                    importedModule.default(req, res, next, "/adventure_book/the_devils_fingers/", "adventure_book/")
                 );
         },
     },
