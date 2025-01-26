@@ -13,6 +13,7 @@ export default defineConfig({
 				contact: "src/contact.html",
 				meetingMinutes: "src/meeting-minutes.html",
 				thingsToKnow: "src/things-to-know.html",
+				hireMe: "src/hire_me.html",
 			}
 		}
 	},

@@ -9,10 +9,12 @@ const DEFAULT_DESTINATION = "./dist/";
 const INCLUDED_PACKAGES = [
     "../jthome/dist/",
     "../imposter/dist/",
+    /*
     [
-        `${process.env.SITE_MODULE_REPOSITORY_DIRECTORY}adventurebook/build/`,
+        `${process.env.SITE_MODULE_REPOSITORY_DIRECTORY}adventurebook/dist/`,
         "adventure_book/",
     ],
+    */
 ];
 
 const copyFiles = () => {
