@@ -12,6 +12,7 @@ const ROUTES = [
     "/meeting-minutes",
     "/poems",
     "/things-to-know",
+    "/hire_me",
     /*
   "/bast",
   ["/bel-air-strong-towns", "bast"],
