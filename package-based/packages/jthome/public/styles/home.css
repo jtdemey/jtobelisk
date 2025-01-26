@@ -631,6 +631,10 @@ strong {
   border: 1px solid hsl(208, 10%, 90%);
 }
 
+.focal-nav {
+	color: hsl(120, 40%, 89%);
+}
+
 #eye {
   display: block;
   position: absolute;
@@ -850,8 +854,8 @@ strong {
 .keyringbot-highlight {
   background-color: #344e41;
 }
-.tdf-highlight {
-  background-color: #3c413c;
+.taleweaver-highlight {
+  background-color: hsl(60, 13%, 27%);
 }
 
 .media-highlight {
@@ -898,22 +902,15 @@ strong {
   z-index: 999;
 }
 
-.content-area a {
-  color: #fff;
-  text-decoration: none;
-}
-
 .content-area a:hover {
   color: #96dbce;
   text-decoration: none;
 }
 
 .content-view {
-  display: block;
   min-width: calc(100% - 86px);
   min-height: 100vh;
   margin: 0;
-  text-align: center;
 }
 
 .content-view-fixed-nav {
@@ -923,6 +920,12 @@ strong {
 .content {
   margin: 15vh 2rem 0;
   padding: 2rem 0;
+  text-align: center;
+}
+
+.content a {
+  color: #fff;
+  text-decoration: none;
 }
 
 .inner-content {
@@ -965,6 +968,10 @@ strong {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.content-text > a {
+	color: hsl(220, 50%, 80%);
+}
+
 .m-b-1 {
   margin-bottom: 1em;
 }
@@ -997,6 +1004,7 @@ strong {
   background: rgba(87, 103, 100, 0.75);
   box-shadow: 8px 8px #1a1a1a;
   cursor: grab;
+	text-align: center;
 }
 
 .content-btn:hover {
@@ -1067,9 +1075,13 @@ strong {
 }
 
 /* CONTACT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+#contact-container {
+  background: hsl(179, 39%, 18%);
+}
+
 #contact-methods {
-  max-width: 480px;
-  margin: 150px auto;
+  max-width: 380px;
+  margin: 48px auto;
   font-family: "Ubuntu", sans-serif;
 }
 
@@ -1091,119 +1103,8 @@ strong {
   filter: invert(99%) sepia(0%) saturate(0%) hue-rotate(147deg) brightness(90%) contrast(89%);
   width: 24px;
   height: 24px;
+	margin: 0px 12px;
 }
-
-/*
-.contact-text {
-  max-width: 40em;
-  color: white;
-  margin: 3em auto 3em;
-  line-height: 1.5em;
-  padding: 0 1em;
-  font-size: 1em;
-}
-
-.contact-form {
-  max-width: 40rem;
-  padding: 30px;
-  background: #ffffff;
-  margin: 1em auto;
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
-  -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
-  -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
-}
-
-.contact-form h2 {
-  background: #4d4d4d;
-  text-transform: uppercase;
-  color: #797979;
-  font-size: 18px;
-  font-weight: 100;
-  padding: 20px;
-  margin: -30px -30px 30px -30px;
-}
-
-.contact-form input[type="text"],
-.contact-form input[type="date"],
-.contact-form input[type="datetime"],
-.contact-form input[type="email"],
-.contact-form input[type="number"],
-.contact-form input[type="search"],
-.contact-form input[type="time"],
-.contact-form input[type="url"],
-.contact-form input[type="password"],
-.contact-form textarea,
-.contact-form select {
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  outline: none;
-  display: block;
-  width: 100%;
-  padding: 7px;
-  border: none;
-  border-bottom: 1px solid #ddd;
-  background: transparent;
-  margin-bottom: 10px;
-  height: 45px;
-  font-family: "Ubuntu", sans-serif;
-}
-
-.contact-form textarea {
-  height: 5rem;
-  resize: none;
-  overflow: hidden;
-}
-
-.contact-form input[type="button"],
-.contact-form input[type="submit"] {
-  -moz-box-shadow: inset 0px 1px 0px 0px #45d6d6;
-  -webkit-box-shadow: inset 0px 1px 0px 0px #45d6d6;
-  box-shadow: inset 0px 1px 0px 0px #45d6d6;
-  background-color: #2cbbbb;
-  border: 1px solid #27a0a0;
-  display: inline-block;
-  cursor: pointer;
-  color: #ffffff;
-  font-family: "Open Sans Condensed", sans-serif;
-  font-size: 14px;
-  padding: 8px 18px;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-
-.contact-form input[type="button"]:hover,
-.contact-form input[type="submit"]:hover {
-  background: linear-gradient(to bottom, #34caca 5%, #30c9c9 100%);
-  background-color: #34caca;
-}
-
-.form-elem {
-  display: inline-block;
-  width: 20em;
-  outline: none;
-  border: none;
-}
-
-.contact-name {
-  padding-bottom: 1rem;
-}
-
-.contact-inquiry {
-  padding-bottom: 1rem;
-}
-
-.contact-submit {
-  display: inline-block;
-  width: 140px;
-  height: 2em;
-  margin: 0 12px;
-  background: rgba(87, 103, 100, 0.75);
-  box-shadow: 8px 8px #1a1a1a;
-  cursor: grab;
-}
-
-*/
 
 /* IMAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 .image-previews {
@@ -1274,6 +1175,10 @@ strong {
   color: hsl(133, 18%, 89%);
 }
 
+#hire-me-container {
+	background: hsl(311, 44%, 18%);
+}
+
 /* UTILITY ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 .center-text {
   display: flex;
@@ -1318,6 +1223,10 @@ strong {
   blockquote > p {
     padding: 0px 25%;
   }
+
+	.mobile-only {
+		display: none;
+	}
 
   .mnav-container {
     display: none;
