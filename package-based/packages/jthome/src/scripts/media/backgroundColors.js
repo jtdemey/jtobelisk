@@ -1,4 +1,7 @@
-//Media #45050C, NSG #20260d, Meeting Minutes #273F3A, Things to Know #175873
-const BackgroundColors = ["#45050C", "#20260d", "#273F3A", "#175873"];
+// Media #45050C
+// Art #293e47
+// Photos #273F3A
+// Poems #20260d
+const BackgroundColors = ["#45050C", "#293e47", "#273F3A", "#20260d"];
 
 export default BackgroundColors;

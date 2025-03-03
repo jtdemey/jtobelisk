@@ -1,4 +1,10 @@
-const loadImage = async (ind, elementIdentifier, imgDirectory, isPreview, altDescription) => {
+const loadImage = async (
+  ind,
+  elementIdentifier,
+  imgDirectory,
+  isPreview,
+  altDescription,
+) => {
   const uri = `${window.location.origin}/img/${imgDirectory}/`;
   const dood = new Image();
   dood.src = `${uri}${isPreview ? "thumbs/" : ""}img${ind}.webp`;
@@ -35,13 +41,23 @@ export const loadImages = async (
   let newImagesLoaded = imagesLoaded;
   for (let i = imagesLoaded + 1; i < imagesLoaded + amountToLoad + 1; i++) {
     if (newImagesLoaded <= maxImages) {
-      await loadImage(i, elementIdentifier, imgDirectory, false, altDescriptions[i - 1]);
+      await loadImage(
+        i,
+        elementIdentifier,
+        imgDirectory,
+        false,
+        altDescriptions[i - 1],
+      );
       newImagesLoaded += 1;
     } else {
       const siteWrapper = document.querySelector(".site-wrapper");
-      const loadImagesButton = document.querySelector("#load-images-btn > div > h5");
+      const loadImagesButton = document.querySelector(
+        "#load-images-btn > div > h5",
+      );
       loadImagesButton.innerHTML = "Scroll to top";
-      loadImagesButton.addEventListener("click", () => siteWrapper.scrollTo({ behavior: "smooth", top: 0 }));
+      loadImagesButton.addEventListener("click", () =>
+        siteWrapper.scrollTo({ behavior: "smooth", top: 0 }),
+      );
     }
   }
   return newImagesLoaded;
@@ -60,7 +76,9 @@ export const loadImagePreviews = async (
       randInts.push(ind);
     }
   }
-  for (let i = 0; i < randInts.length; i++) {
-    await loadImage(randInts[i], elementIdentifier, imgDirectory, true);
-  }
+  // TODO check max
+  const loadImagePromises = randInts.map((randInt) =>
+    loadImage(randInt, elementIdentifier, imgDirectory, true),
+  );
+  return Promise.allSettled(loadImagePromises);
 };

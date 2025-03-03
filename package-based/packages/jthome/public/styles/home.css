@@ -861,14 +861,14 @@ strong {
 .media-highlight {
   background-color: #45050c;
 }
-.poems-highlight {
-  background-color: #20260d;
+.art-highlight {
+  background-color: #293e47;
 }
-.mm-highlight {
+.photos-highlight {
   background-color: #273f3a;
 }
-.ttk-highlight {
-  background-color: #175873;
+.poems-highlight {
+  background-color: #20260d;
 }
 
 .nav-highlight-unfixed {
@@ -902,6 +902,11 @@ strong {
   z-index: 999;
 }
 
+.content-area a {
+  color: #fff;
+  text-decoration: none;
+}
+
 .content-area a:hover {
   color: #96dbce;
   text-decoration: none;
@@ -918,14 +923,9 @@ strong {
 }
 
 .content {
-  margin: 15vh 2rem 0;
-  padding: 2rem 0;
+  margin: 15vh 32px 0;
+  padding: 32px 0;
   text-align: center;
-}
-
-.content a {
-  color: #fff;
-  text-decoration: none;
 }
 
 .inner-content {
@@ -990,6 +990,14 @@ strong {
   cursor: grab;
   text-align: center;
   text-decoration: none;
+}
+
+.back-btn a {
+  text-decoration: none;
+}
+
+.back-btn h5 {
+  color: white;
 }
 
 .content-btns {
@@ -1110,21 +1118,24 @@ strong {
 .image-previews {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  padding: 1.5rem 0;
+  justify-content: space-around;
+  width: 100vw;
+  margin-left: -32px;
+  padding: 32px 0;
   background: rgba(0, 0, 0, 0);
 }
 
 .image-preview {
   display: flex;
   align-items: center;
-  height: 172px;
-  flex: 0 1 96px;
+  height: 212px;
+  flex: 0 1 128px;
   margin: 0 1rem;
 }
 
 .image-preview > a > img {
   width: 100%;
+  border: 8px ridge hsl(13, 28%, 18%);
 }
 
 .image-cards {
@@ -1143,22 +1154,41 @@ strong {
   height: 100%;
 }
 
-#images-content {
+#images-container {
+  margin: 100px 0px 200px;
+}
+
+#gallery-content {
+  padding: 0px 32px;
+  background: hsl(358, 31%, 6%);
+  color: hsl(344, 18%, 92%);
+}
+
+#photos-content {
+  padding: 0px 32px;
+  background: hsl(180, 18%, 14%);
   color: hsl(133, 18%, 92%);
-  text-align: center;
 }
 
-#images-content > h1 {
-  margin: 0 1rem;
+#photos-content h1 {
+  margin: 0px 0px 48px;
+  line-height: 88px;
 }
 
-#images-content > h2 {
+#photos-content h2 {
   margin-top: 1rem;
   font-family: "Vollkorn", serif;
 }
 
-#images-container {
-  margin: 100px 0px 200px;
+#photos-content ul {
+  width: calc(100% - 32px);
+  line-height: 28px;
+  list-style-type: disclosure-closed;
+}
+
+#photos-content > .content-area > ul > li > a {
+  border-bottom: 1px solid hsl(133, 18%, 92%);
+  font-size: 22px;
 }
 
 #load-images-btn-area {
@@ -1260,6 +1290,15 @@ strong {
 
   .image-card {
     max-width: 80%;
+  }
+
+  .image-previews {
+    width: calc(100vw - 86px);
+    padding: 64px 0px;
+  }
+
+  .image-preview {
+    flex: 0 1 192px;
   }
 
   .padded-content {

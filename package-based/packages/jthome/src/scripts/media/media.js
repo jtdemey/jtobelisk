@@ -6,7 +6,7 @@ import { scrollPoll } from "../lib/scroll";
 import { loadImagePreviews } from "../lib/loadImages";
 
 const MEETING_MINUTES_IMAGE_COUNT = 20;
-const TOP_THINGS_IMAGE_COUNT = 15;
+const PHOTOS_IMAGE_COUNT = 15;
 
 const siteWrapper = document.querySelector(".site-wrapper");
 const mainContainer = document.querySelector(".main-container");
@@ -28,13 +28,13 @@ mainContainer.style.transition = "background 1.2s";
 const amountToLoad = uiState.mobile ? 2 : 4;
 loadImagePreviews(
   amountToLoad,
-  "mm-images",
+  "art-images",
   "meeting_minutes",
   MEETING_MINUTES_IMAGE_COUNT
 );
 loadImagePreviews(
   amountToLoad,
-  "things-to-know-images",
-  "things_to_know",
-  TOP_THINGS_IMAGE_COUNT
+  "photos-images",
+  "photos/things_to_know",
+  PHOTOS_IMAGE_COUNT
 );
