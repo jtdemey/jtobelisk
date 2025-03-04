@@ -895,7 +895,6 @@ strong {
 
 .content-area {
   display: grid;
-  grid-template-rows: repeat(4, 1fr, 0);
   padding: 0;
   scroll-behavior: smooth;
   color: white;
@@ -1159,7 +1158,7 @@ strong {
 }
 
 #gallery-content {
-  padding: 0px 32px;
+  padding: 0px 18px;
   background: hsl(358, 31%, 6%);
   color: hsl(344, 18%, 92%);
 }
