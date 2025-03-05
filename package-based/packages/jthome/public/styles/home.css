@@ -1149,12 +1149,11 @@ strong {
 }
 
 .image-card > a > img {
-  width: min(calc(100% - 18px), 720px);
   height: 100%;
 }
 
 #images-container {
-  margin: 100px 0px 200px;
+  margin: 64px 0px 128px;
 }
 
 #gallery-content {
@@ -1165,6 +1164,10 @@ strong {
 }
 
 #gallery-content #images {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
   margin-left: -18px;
 }
 
@@ -1248,7 +1251,7 @@ strong {
   }
 
   .image-card {
-    height: 212px;
+    height: 284px;
     flex: 0 1 164px;
   }
 }
@@ -1292,8 +1295,14 @@ strong {
     padding: 169px 69px;
   }
 
+  #images {
+    padding-top: 32px;
+  }
+
   .image-card {
     max-width: 80%;
+    height: 420px;
+    flex: 0 1 164px;
   }
 
   .image-previews {
@@ -1303,6 +1312,10 @@ strong {
 
   .image-preview {
     flex: 0 1 192px;
+  }
+
+  #gallery-content, #photos-content {
+    padding: 0px 64px;
   }
 
   .padded-content {

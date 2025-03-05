@@ -29,7 +29,7 @@ const amountToLoad = uiState.mobile ? 2 : 4;
 loadImagePreviews(
   amountToLoad,
   "art-images",
-  "meeting_minutes",
+  "art/meeting_minutes",
   MEETING_MINUTES_IMAGE_COUNT
 );
 loadImagePreviews(

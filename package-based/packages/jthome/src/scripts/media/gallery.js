@@ -1,14 +1,17 @@
 import { loadImages } from "../lib/loadImages";
-import { ALBUMS } from "./photos";
+import { ALBUMS } from "./albums";
 
 let album;
 let albumName;
 let imagesLoaded = 0;
+let isPhotoAlbum = false;
 
 const init = async () => {
   const queryParams = new URLSearchParams(window.location.search);
   albumName = queryParams.get("album");
   album = ALBUMS[albumName];
+  isPhotoAlbum = !album.isArt;
+
   if (!album) {
     const text = document.querySelector("#images-container > p");
     text.style.paddingBottom = "64px";
@@ -17,14 +20,15 @@ const init = async () => {
     return;
   }
 
-  document.getElementById("gallery-content").style.backgroundColor = album.background;
+  document.getElementById("gallery-content").style.backgroundColor =
+    album.background;
   document.getElementById("gallery-header").innerText = album.name;
 
   imagesLoaded = await loadImages(
     8,
     "images",
     imagesLoaded,
-    `photos/${albumName}`,
+    isPhotoAlbum ? `photos/${albumName}` : `art/${albumName}`,
     album.count,
     album.alts,
   );
@@ -38,7 +42,7 @@ const mountBtnListener = () => {
       4,
       "images",
       imagesLoaded,
-      `photos/${albumName}`,
+      isPhotoAlbum ? `photos/${albumName}` : `art/${albumName}`,
       album.count,
       album.alts,
     );

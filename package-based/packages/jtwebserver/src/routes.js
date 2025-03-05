@@ -9,22 +9,18 @@ const ROUTES = [
     "/software",
     "/media",
     "/contact",
-    "/meeting-minutes",
+    "/gallery",
+    "/photos",
     "/poems",
-    "/things-to-know",
     "/hire_me",
     /*
-  "/bast",
-  ["/bel-air-strong-towns", "bast"],
-  ["/belairstrongtowns", "bast"],
-  ["/bast/welcome", "bast_welcome"],
-  "/civildawn",
-  "/imposter",
-  "/imposter/:gameCode",
-  "/meyhemn",
-  "/rollfighter",
-  "/sandbox",
-  */
+    "/civildawn",
+    "/imposter",
+    "/imposter/:gameCode",
+    "/meyhemn",
+    "/rollfighter",
+    "/sandbox",
+    */
 ];
 
 const sendHtmlFile = (res, fileName) => {
