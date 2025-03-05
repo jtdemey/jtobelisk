@@ -10,7 +10,7 @@ const loadImage = async (
   dood.src = `${uri}${isPreview ? "thumbs/" : ""}img${ind}.webp`;
 
   const setImgDimensions = (e) => {
-    dood.alt = altDescription;
+    dood.alt = altDescription ?? "An image";
     dood.width = e.target?.width;
     dood.height = e.target?.height;
   };
@@ -40,7 +40,7 @@ export const loadImages = async (
 ) => {
   let newImagesLoaded = imagesLoaded;
   for (let i = imagesLoaded + 1; i < imagesLoaded + amountToLoad + 1; i++) {
-    if (newImagesLoaded <= maxImages) {
+    if (newImagesLoaded < maxImages) {
       await loadImage(
         i,
         elementIdentifier,
@@ -76,7 +76,6 @@ export const loadImagePreviews = async (
       randInts.push(ind);
     }
   }
-  // TODO check max
   const loadImagePromises = randInts.map((randInt) =>
     loadImage(randInt, elementIdentifier, imgDirectory, true),
   );

@@ -3,11 +3,13 @@ import { loadImagePreviews } from "../lib/loadImages";
 export const ALBUMS = {
   sanctum: {
     alts: [],
+    background: "hsl(48, 15%, 13%)",
     count: 31,
     name: "I Bid You Ladew",
   },
   shelter: {
     alts: [],
+    background: "hsl(354, 22%, 17%)",
     count: 18,
     name: "Shelter",
   },
@@ -29,6 +31,7 @@ export const ALBUMS = {
       "A cubed, tinted glass building stands next to an empty parking lot and street with one truck visible in the distance.",
       "A residential street leads to trees in the distance, as a couple cars are parked on either side of it, and a few buildings are visible next to clear lawns.",
     ],
+    background: "hsl(240, 24%, 14%)",
     count: 15,
     name: "TOP THINGS TO KNOW BEFORE YOU MOVE TO BEL AIR",
   },

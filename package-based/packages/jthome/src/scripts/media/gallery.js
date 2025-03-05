@@ -13,9 +13,11 @@ const init = async () => {
     const text = document.querySelector("#images-container > p");
     text.style.paddingBottom = "64px";
     text.innerText = "Failed to load album";
+    document.getElementById("load-images-btn").style.display = "none";
     return;
   }
 
+  document.getElementById("gallery-content").style.backgroundColor = album.background;
   document.getElementById("gallery-header").innerText = album.name;
 
   imagesLoaded = await loadImages(

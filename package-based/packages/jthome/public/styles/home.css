@@ -1134,7 +1134,7 @@ strong {
 
 .image-preview > a > img {
   width: 100%;
-  border: 8px ridge hsl(13, 28%, 18%);
+  border: 8px ridge hsl(13, 18%, 18%);
 }
 
 .image-cards {
@@ -1149,7 +1149,7 @@ strong {
 }
 
 .image-card > a > img {
-  width: min(100%, 720px);
+  width: min(calc(100% - 18px), 720px);
   height: 100%;
 }
 
@@ -1158,9 +1158,14 @@ strong {
 }
 
 #gallery-content {
+  min-height: 100%;
   padding: 0px 18px;
   background: hsl(358, 31%, 6%);
   color: hsl(344, 18%, 92%);
+}
+
+#gallery-content #images {
+  margin-left: -18px;
 }
 
 #photos-content {
