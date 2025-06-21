@@ -13,7 +13,6 @@ export default defineConfig({
 				photos: "src/photos.html",
 				poems: "src/poems.html",
 				contact: "src/contact.html",
-				hireMe: "src/hire_me.html",
 			}
 		}
 	},

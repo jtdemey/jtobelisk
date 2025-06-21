@@ -563,19 +563,32 @@ strong {
 }
 
 /* HOME ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.garden-bg {
+    background-image: url("/img/homebackground.jpg");
+    @supports (background-image: url("/img/homebackground.webp")) {
+      background-image: url("/img/homebackground.webp");
+    }
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 240%;
+}
+
+.fox-bg {
+    background-image: url("/img/maplefox_darkgreen.jpg");
+    @supports (background-image: url("/img/maplefox_darkgreen.webp")) {
+      background-image: url("/img/maplefox_darkgreen.webp");
+    }
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 340%;
+}
+
 #home-main {
   display: grid;
   grid-template-rows: 1fr 3fr;
   width: 100%;
   height: 100%;
-  background-image: url("/img/homebackground.jpg");
-  @supports (background-image: url("/img/homebackground.webp")) {
-    background-image: url("/img/homebackground.webp");
-  }
   background-color: hsl(359, 20%, 9%);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 240%;
   color: hsl(208, 10%, 90%);
 }
 
@@ -628,7 +641,9 @@ strong {
 #home-nav > ul > a > li {
   margin: 1.3rem 0;
   padding: 0.5rem 1rem;
+  background-color: rgba(90, 117, 82, 0.5);
   border: 1px solid hsl(208, 10%, 90%);
+  border-radius: 3px;
 }
 
 .focal-nav {
